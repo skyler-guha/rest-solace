@@ -39,6 +39,11 @@ homepage = "https://github.com/skyler-guha/rest-solace"
 documentation = "https://github.com/skyler-guha/rest-solace"
 repository = "https://github.com/skyler-guha/rest-solace"
 
+#Build command: python -m build
+#check release: twine check dist/*
+#push release: twine upload dist/*
+#(update version number before new release)
+
 # ... other project metadata fields and resources:
 #   
 #   List of clasifiers: https://pypi.org/classifiers/
