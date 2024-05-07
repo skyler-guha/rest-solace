@@ -7,7 +7,7 @@ About:
 
 rest-solace is a rest based library for Solace Message Broker that allows you to Publish, Consume, & Manage!!
 
-Check it out at PYPI: <https://pypi.org/project/rest-solace/>`_
+Check it out at PYPI: `PYPI page for the project <https://pypi.org/project/rest-solace/>`_.
 
 [code examples coming soon]
 
