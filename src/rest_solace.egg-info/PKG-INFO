@@ -5,6 +5,9 @@ Summary: REST based library for Solace Message Broker. Publish, Consume, & Manag
 Author-email: Skyler Guha <skylerguha@gmail.com>
 Maintainer-email: Skyler Guha <skylerguha@gmail.com>
 License: apache 2.0
+Project-URL: homepage, https://github.com/skyler-guha/rest-solace
+Project-URL: documentation, https://github.com/skyler-guha/rest-solace
+Project-URL: repository, https://github.com/skyler-guha/rest-solace
 Keywords: solace,rest,REST API,rest-solace,rest_solace,rest solace
 Classifier: Development Status :: 4 - Beta
 Classifier: Programming Language :: Python :: 3
@@ -24,11 +27,21 @@ Requires-Dist: threading
 Requires-Dist: json
 Requires-Dist: urllib
 
-References:
+============
+rest-solace
+============
+|
+About:
+++++++++
 
-https://netmetic.wordpress.com/2019/04/18/setting-up-a-rest-delivery-point-for-soap-endpoints/
-https://docs.solace.com/API/REST/Using-REST.htm
-https://docs.solace.com/API/RESTMessagingPrtl/Solace-REST-Message-Encoding.htm#_Ref399926122
-https://docs.solace.com/API/RESTMessagingPrtl/Solace-REST-Message-Encoding.htm
-https://solace.community/discussion/1637/can-i-implemengt-rest-request-reply-mechanism-using-rest-delivery-points
+rest-solace is a rest based library for Solace Message Broker that allows you to Publish, Consume, & Manage!!
 
+[code examples coming soon]
+
+Development References:
+
+* https://netmetic.wordpress.com/2019/04/18/setting-up-a-rest-delivery-point-for-soap-endpoints/
+* https://docs.solace.com/API/REST/Using-REST.htm
+* https://docs.solace.com/API/RESTMessagingPrtl/Solace-REST-Message-Encoding.htm#_Ref399926122
+* https://docs.solace.com/API/RESTMessagingPrtl/Solace-REST-Message-Encoding.htm
+* https://solace.community/discussion/1637/can-i-implemengt-rest-request-reply-mechanism-using-rest-delivery-points
