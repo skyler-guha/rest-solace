@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rest-solace"
+authors = [
+    {name = "Skyler Guha", email = "skylerguha@gmail.com"},
+]
+maintainers = [
+  {name = "Skyler Guha", email = "skylerguha@gmail.com"}
+]
+description = "REST based library for Solace Message Broker. Publish, Consume, & Manage!!"
+readme = "README.rst"
+requires-python = ">=3.8"
+keywords = ["solace", "rest", "REST API", "rest-solace", "rest_solace", "rest solace"]
+license = {text = "apache 2.0"}
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Intended Audience :: Developers"
+]
+dependencies = [
+    "requests>=2.30.0",
+    "http>=0.02",
+    "functools",
+    "datetime",
+    "typing",
+    "queue",
+    "threading",
+    "json",
+    "urllib"
+]
+version = "0.0.0"
+
+
+# ... other project metadata fields and resources:
+#   
+#   List of clasifiers: https://pypi.org/classifiers/
+#   https://packaging.python.org/en/latest/guides/writing-pyproject-toml/
+#   https://packaging.python.org/en/latest/guides/writing-pyproject-toml/
+#   https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html

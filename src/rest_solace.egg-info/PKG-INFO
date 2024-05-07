@@ -1,0 +1,34 @@
+Metadata-Version: 2.1
+Name: rest-solace
+Version: 0.0.0
+Summary: REST based library for Solace Message Broker. Publish, Consume, & Manage!!
+Author-email: Skyler Guha <skylerguha@gmail.com>
+Maintainer-email: Skyler Guha <skylerguha@gmail.com>
+License: apache 2.0
+Keywords: solace,rest,REST API,rest-solace,rest_solace,rest solace
+Classifier: Development Status :: 4 - Beta
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Intended Audience :: Developers
+Requires-Python: >=3.8
+Description-Content-Type: text/x-rst
+License-File: LICENSE.txt
+License-File: NOTICE.txt
+Requires-Dist: requests>=2.30.0
+Requires-Dist: http>=0.02
+Requires-Dist: functools
+Requires-Dist: datetime
+Requires-Dist: typing
+Requires-Dist: queue
+Requires-Dist: threading
+Requires-Dist: json
+Requires-Dist: urllib
+
+References:
+
+https://netmetic.wordpress.com/2019/04/18/setting-up-a-rest-delivery-point-for-soap-endpoints/
+https://docs.solace.com/API/REST/Using-REST.htm
+https://docs.solace.com/API/RESTMessagingPrtl/Solace-REST-Message-Encoding.htm#_Ref399926122
+https://docs.solace.com/API/RESTMessagingPrtl/Solace-REST-Message-Encoding.htm
+https://solace.community/discussion/1637/can-i-implemengt-rest-request-reply-mechanism-using-rest-delivery-points
+

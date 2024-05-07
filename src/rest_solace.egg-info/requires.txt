@@ -1,0 +1,9 @@
+requests>=2.30.0
+http>=0.02
+functools
+datetime
+typing
+queue
+threading
+json
+urllib

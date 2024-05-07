@@ -1,0 +1,30 @@
+Copyright 2024 Skyler Guha
+
+
+This software uses "requests" library by Kenneth Reitz.
+It is licensed under "Apache 2.0 license".
+
+This software uses "http" library by The Python Software Foundation.
+It is licensed under "The Python Software Foundation License (PSFL)"
+
+This software uses "functools" library by The Python Software Foundation.
+It is licensed under "The Python Software Foundation License (PSFL)"
+
+This software uses "datetime" library by The Python Software Foundation.
+It is licensed under "The Python Software Foundation License (PSFL)"
+
+This software uses "typing" library by The Python Software Foundation.
+It is licensed under "The Python Software Foundation License (PSFL)"
+
+This software uses "queue" library by The Python Software Foundation.
+It is licensed under "The Python Software Foundation License (PSFL)"
+
+This software uses "threading" library by The Python Software Foundation.
+It is licensed under "The Python Software Foundation License (PSFL)"
+
+This software uses "json" library by The Python Software Foundation.
+It is licensed under "The Python Software Foundation License (PSFL)"
+
+This software uses "urllib" library by The Python Software Foundation.
+It is licensed under "The Python Software Foundation License (PSFL)"
+
