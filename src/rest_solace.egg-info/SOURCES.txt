@@ -3,8 +3,6 @@ LICENSE.txt
 NOTICE.txt
 README.rst
 pyproject.toml
-dist/rest_solace-0.0.0-py3-none-any.whl
-dist/rest_solace-0.0.0.tar.gz
 docs/development_refrences.rst
 src/rest_solace/__init__.py
 src/rest_solace/consumer.py

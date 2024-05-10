@@ -42,7 +42,7 @@ homepage = "https://github.com/skyler-guha/rest-solace"
 documentation = "https://github.com/skyler-guha/rest-solace"
 repository = "https://github.com/skyler-guha/rest-solace"
 
-#Build command: python -m build
+#Build command (delete old dist folder before running): python -m build
 #check release: twine check dist/*
 #push release: twine upload dist/*
 #(update version number before new release)
