@@ -3,14 +3,24 @@ rest-solace
 
 **rest-solace** is a rest based python library for Solace Message Broker that allows you to Publish, Consume, & Manage!!
 
-Check it out at PYPI: `PYPI page for the project <https://pypi.org/project/rest-solace/>`_.
+| Check it out at `PyPI <https://pypi.org/project/rest-solace/>`_.
+| View the code at `Github <https://github.com/skyler-guha/rest-solace/>`_.
+| Read the docs from `Here <https://github.com/skyler-guha/rest-solace/blob/master/docs/index.rst/>`_.
 
 Note: 
     | Right now the focus of this library is on the 'messaging' mode for solace message VPNs.
     | In the future I plan to add better support for 'gateway' mode as well.
 
-Sending messages to broker:
-----------------------------
+Getting started with Solace:
+-----------------------------
+If you are new to solace and confused about the terminology and workflows around it, it is **highly** recommended 
+that you read `this <https://github.com/skyler-guha/rest-solace/blob/master/docs/getting_started_with_solace.rst/>`_ document first.
+It gives a brief explanation on the different components of solace; and that too within the context of this library.
+
+|
+
+Sending messages (for message-VPN in messaging mode):
+-----------------------------------------------------
 
 .. code-block:: python
 
@@ -91,12 +101,12 @@ Receiving messages and sending back a response:
     consumer_obj.startConsumer(host= CONSUMER_HOST, 
                                port= CONSUMER_PORT,
                                callback_function= return_uppercase, 
-                               log= True)
-    
+                               log= True) 
+
 |
 
 Setting up a message VPN for message broking (in messaging mode):
------------------------------------------------------------------
+------------------------------------------------------------------
 (This is a bit advance but the library includes lots of utility functions to make initial setup easy)
 
 .. code-block:: python
@@ -112,23 +122,17 @@ Setting up a message VPN for message broking (in messaging mode):
     #Creating a custom message VPN 
     #(automatically applies required VPN configuration for rest based communication).
     manager.create_message_vpn(msgVpnName= NEW_VPN_NAME,
-                               serviceRestIncomingPlainTextListenPort= NEW_VPN_PORT,
-                               serviceRestMode= "messaging" #auto configuration will be influenced by this parameter.
+                               serviceRestIncomingPlainTextListenPort= VPN_PORT, #Assign it an unused port
+                               serviceRestMode= "messaging" #auto configuration will be influenced by this parameter
                                )
 
     
     #Setting up your Message VPN for rest based communication
-    #(For VPN that is in messaging mode)
     manager.auto_rest_messaging_setup_utility(msgVpnName= NEW_VPN_NAME, #Existing message VPN
-
-                                              queueName= 'my_queue',  #Creates a new queue
-
-                                              subscriptionTopic=None,  #The topic the queue should subscribe to
-
-                                              restDeliveryPointName='myRDP',  #New RDP to handle incoming messages
-
-                                              restConsumerName='myConsumer',	#A name for your consumer
-
+                                              queueName= 'my_queue', #Creates a new queue
+                                              subscriptionTopic=None, #The topic the queue should subscribe to
+                                              restDeliveryPointName='myRDP', #New RDP to handle incoming messages
+                                              restConsumerName='myConsumer', #A name for your consumer
                                               remoteHost= CONSUMER_HOST, 
                                               remotePort= CONSUMER_PORT)
 
