@@ -35,7 +35,7 @@ dependencies = [
     "json",
     "urllib"
 ]
-version = "0.0.0"
+version = "0.0.1"
 
 [project.urls]
 homepage = "https://github.com/skyler-guha/rest-solace"

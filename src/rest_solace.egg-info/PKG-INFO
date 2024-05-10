@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: rest-solace
-Version: 0.0.0
+Version: 0.0.1
 Summary: REST based library for Solace Message Broker. Publish, Consume, & Manage!!
 Author-email: Skyler Guha <skylerguha@gmail.com>
 Maintainer-email: Skyler Guha <skylerguha@gmail.com>
