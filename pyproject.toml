@@ -13,7 +13,10 @@ maintainers = [
 description = "REST based library for Solace Message Broker. Publish, Consume, & Manage!!"
 readme = "README.rst"
 requires-python = ">=3.8"
-keywords = ["solace", "rest", "REST API", "rest-solace", "rest_solace", "rest solace"]
+keywords = ["solace", "rest", 
+            "REST API", "rest-solace", 
+            "rest_solace", "rest solace", 
+            "python", "pythonic"]
 license = {text = "apache 2.0"}
 classifiers = [
     "Development Status :: 4 - Beta",
