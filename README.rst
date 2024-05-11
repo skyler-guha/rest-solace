@@ -121,21 +121,52 @@ Setting up a message VPN for message broking (in messaging mode):
 
     
     #Creating a custom message VPN 
-    #(automatically applies required VPN configuration for rest based communication).
-    manager.create_message_vpn(msgVpnName= NEW_VPN_NAME,
-                               serviceRestIncomingPlainTextListenPort= VPN_PORT, #Assign it an unused port
-                               serviceRestMode= "messaging" #auto configuration will be influenced by this parameter
-                               )
+    #(can automatically apply required VPN configuration for rest based communication).
+    manager.create_message_vpn(
+        msgVpnName= NEW_VPN_NAME,
+        serviceRestIncomingPlainTextListenPort= VPN_PORT, #Assign it an unused port
+        serviceRestMode= "messaging" #auto configuration will be influenced by this parameter
+    )
 
     
-    #Setting up your Message VPN for rest based communication
-    manager.auto_rest_messaging_setup_utility(msgVpnName= NEW_VPN_NAME, #Existing message VPN
-                                              queueName= 'my_queue', #Creates a new queue
-                                              subscriptionTopic=None, #The topic the queue should subscribe to
-                                              restDeliveryPointName='myRDP', #New RDP to handle incoming messages
-                                              restConsumerName='myConsumer', #A name for your consumer
-                                              remoteHost= CONSUMER_HOST, 
-                                              remotePort= CONSUMER_PORT)
+    #Automatically setting up your Message VPN for rest based communication
+    manager.auto_rest_messaging_setup_utility(
+        msgVpnName= NEW_VPN_NAME, #Existing message VPN
+        queueName= 'my_queue', #Creates a new queue
+        subscriptionTopic="test_topic", #The topic the queue should subscribe to
+        restDeliveryPointName='myRDP', #New RDP to handle incoming messages
+        restConsumerName= 'myConsumer', #A name for your consumer
+        remoteHost= CONSUMER_HOST, 
+        remotePort= CONSUMER_PORT
+    )
+
+                                              
+    #Doing the same setup manually (Shown for comparison)
+    manager.update_client_profile(msgVpnName= NEW_VPN_NAME, 
+                                  clientProfileName= "default",
+                                  allowGuaranteedMsgReceiveEnabled= True,
+                                  allowGuaranteedMsgSendEnabled= True)
+    manager.update_client_username(msgVpnName=NEW_VPN_NAME, 
+                                   clientUsername= "default",
+                                   enabled= True)
+    manager.create_queue_endpoint(queueName='my_queue', msgVpnName=NEW_VPN_NAME)
+    manager.subscribe_to_topic_on_queue(subscriptionTopic= "test_topic", queueName= 'my_queue')
+    manager.create_rest_delivery_point(msgVpnName= NEW_VPN_NAME, 
+                                       restDeliveryPointName= 'myRDP', 
+                                       clientProfileName= "default")
+    manager.specify_rest_consumer(msgVpnName= NEW_VPN_NAME, 
+                                  restDeliveryPointName= 'myRDP',
+                                  restConsumerName= 'myConsumer',
+                                  remoteHost= CONSUMER_HOST,
+                                  remotePort= CONSUMER_PORT)
+    manager.create_queue_binding(msgVpnName= NEW_VPN_NAME,
+                                 restDeliveryPointName= 'myRDP',
+                                 queueBindingName= 'my_queue',
+                                 postRequestTarget= '/')
+
+
+    #Turning your RDP off and on again (Useful if solace has trouble connecting to your consumer)
+    manager.restart_rest_delivery_point(msgVpnName= NEW_VPN_NAME, restDeliveryPointName= 'myRDP')
 
     
 
