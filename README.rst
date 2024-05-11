@@ -131,11 +131,11 @@ Setting up a message VPN for message broking (in messaging mode):
     
     #Automatically setting up your Message VPN for rest based communication
     manager.auto_rest_messaging_setup_utility(
-        msgVpnName= NEW_VPN_NAME, #Existing message VPN
-        queueName= 'my_queue', #Creates a new queue
-        subscriptionTopic="test_topic", #The topic the queue should subscribe to
-        restDeliveryPointName='myRDP', #New RDP to handle incoming messages
-        restConsumerName= 'myConsumer', #A name for your consumer
+        msgVpnName= NEW_VPN_NAME,                   #Existing message VPN
+        queueName= 'my_queue',                      #Creates a new queue
+        subscriptionTopic="test_topic",             #The topic the queue should subscribe to
+        restDeliveryPointName='myRDP',              #New RDP to handle incoming messages
+        restConsumerName= 'myConsumer',             #A name for your consumer
         remoteHost= CONSUMER_HOST, 
         remotePort= CONSUMER_PORT
     )
