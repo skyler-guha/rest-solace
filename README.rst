@@ -47,13 +47,14 @@ Sending messages (for message-VPN in messaging mode):
     response = publish_obj.publishToQueueEndpoint(queue_name= "my_queue", 
                                                   message= "hello world!!",
                                                   delivery_mode= "persistent",
-                                                  time_to_live= 10000)
+                                                  timeout= 120)
     print(response)
 
     #Publish for a given topic string and wait for a reply from a consumer
     response = publish_obj.publishForTopic(topic_string= "test_topic", 
                                            message= "hello world!!",
-                                           delivery_mode= "direct")
+                                           delivery_mode= "persistent",
+                                           timeout= 120)
     print(response)
 
 |
