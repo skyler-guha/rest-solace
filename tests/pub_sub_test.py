@@ -20,10 +20,10 @@ EXPECTED_OUTPUT_MESSAGE= bytes("HELLO WORLD!!", 'utf-8')
 manager = Manager(user_name= SEMP_USERNAME, 
                       password= SEMP_PASSWORD, 
                       host= SEMP_HOST, 
-                      SEMP_port= SEMP_PORT)
+                      semp_port= SEMP_PORT)
 
 publish_obj = MessagingPublisher(user_name="admin", password="admin", 
-                                 host= SEMP_HOST, REST_VPNport=NEW_VPN_PORT)
+                                 host= SEMP_HOST, rest_vpn_port=NEW_VPN_PORT)
 
 consumer_obj = Consumer()
 

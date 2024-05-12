@@ -29,7 +29,7 @@ Sending messages (for message-VPN in messaging mode):
     publisher_obj = MessagingPublisher(user_name= "admin", 
                                        password=" admin", 
                                        host= BROKER_IP, 
-                                       REST_VPNport= VPN_PORT #For 'default' VPN it is 9000
+                                       rest_vpn_port= VPN_PORT #For 'default' VPN it is 9000
                                        )
 
     #Publish directly to a queue
@@ -117,7 +117,7 @@ Setting up a message VPN for message broking (in messaging mode):
     manager = Manager(user_name= admin, 
                       password= admin, 
                       host= BROKER_IP, 
-                      SEMP_port= SEMP_PORT) #Default rest management port is 8080
+                      semp_port= SEMP_PORT) #Default rest management port is 8080
 
     
     #Creating a custom message VPN 

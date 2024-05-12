@@ -19,10 +19,10 @@ CONSUMER_PORT= 5000
 manager = Manager(user_name= SEMP_USERNAME, 
                       password= SEMP_PASSWORD, 
                       host= SEMP_HOST, 
-                      SEMP_port= SEMP_PORT)
+                      semp_port= SEMP_PORT)
 
 publish_obj = MessagingPublisher(user_name="admin", password="admin", 
-                                 host= SEMP_HOST, REST_VPNport=NEW_VPN_PORT)
+                                 host= SEMP_HOST, rest_vpn_port=NEW_VPN_PORT)
 
 print("Setting up Message VPN, queue endpoint, and RDP.")
 

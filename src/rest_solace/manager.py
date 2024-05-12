@@ -4,7 +4,7 @@ from urllib.parse import urlsplit, urlunsplit
 class Manager():
     
     def __init__(self, user_name:str, password:str,
-                 host:str, SEMP_port:str= "8080", verify_ssl=False) -> None:
+                 host:str, semp_port:str= "8080", verify_ssl=False) -> None:
         """Class for creating a Manage object for communicating with a broker regarding management stuff.
 
         Args:
@@ -15,7 +15,7 @@ class Manager():
         """
 
         self.http_client = HttpClient(host= host,
-                                      port= SEMP_port,
+                                      port= semp_port,
                                       user_name= user_name,
                                       password= password,
                                       verify_ssl= verify_ssl)

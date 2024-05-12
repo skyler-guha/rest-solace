@@ -28,7 +28,7 @@ try:
     manager = Manager(user_name= SEMP_USERNAME, 
                       password= SEMP_PASSWORD, 
                       host= SEMP_HOST, 
-                      SEMP_port= SEMP_PORT)
+                      semp_port= SEMP_PORT)
     log.info("Testing the creation of manager instance: PASS\n")
     count.passed()
 except Exception as e:

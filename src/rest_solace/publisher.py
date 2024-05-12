@@ -4,36 +4,36 @@ from requests.exceptions import ReadTimeout
 class MessagingPublisher():
     
     def __init__(self, user_name:str, password:str,
-                 host:str, REST_VPNport:str, verify_ssl=False) -> None:
+                 host:str, rest_vpn_port:str, verify_ssl=False) -> None:
         """Class for creating a Publisher object for communicating with a broker to publish a message in Messaging mode.
 
         Args:
             username (str): Username of user with admin level access to the broker.
             password (str): Password for the username provided.
             host (str): Broker address (IPv4)
-            REST_VPNport (str): The port assigned on your vpn of interest where you wish to send messages through REST messaging.
+            rest_vpn_port (str): The port assigned on your vpn of interest where you wish to send messages through REST messaging.
                                 We use this port so specify which VPN we wish to send our messages to.
         """
 
         self.http_client = HttpClient(host= host,
-                                      port= REST_VPNport,
+                                      port= rest_vpn_port,
                                       user_name= user_name,
                                       password= password,
                                       verify_ssl= verify_ssl)
         
     def update_parameters(self, user_name:str, password:str,
-                          host:str, REST_VPNport:str, verify_ssl=False):
+                          host:str, rest_vpn_port:str, verify_ssl=False):
         """Update parameters used to connect with the broker.
 
         Args:
             username (str): Username of user with admin level access to the broker.
             password (str): Password for the username provided.
             host (str): Broker address (IPv4)
-            REST_VPNport (str): The port assigned on your vpn of interest where you wish to send messages through REST messaging.
+            rest_vpn_port (str): The port assigned on your vpn of interest where you wish to send messages through REST messaging.
                                 We use this port so specify which VPN we wish to send our messages to.        """
         
         self.http_client = HttpClient(host= host,
-                                      port= REST_VPNport,
+                                      port= rest_vpn_port,
                                       user_name= user_name,
                                       password= password,
                                       verify_ssl= verify_ssl)
