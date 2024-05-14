@@ -22,8 +22,8 @@ manager = Manager(user_name= SEMP_USERNAME,
                       host= SEMP_HOST, 
                       semp_port= SEMP_PORT)
 
-publish_obj = MessagingPublisher(user_name="admin", password="admin", 
-                                 host= SEMP_HOST, rest_vpn_port=NEW_VPN_PORT)
+publish = MessagingPublisher(user_name="admin", password="admin", 
+                             host= SEMP_HOST, rest_vpn_port=NEW_VPN_PORT)
 
 consumer_obj = Consumer()
 
@@ -54,11 +54,10 @@ manager.restart_rest_delivery_point(restDeliveryPointName= "myRDP",
 #Step4: setup publisher, publish a message, and get response
 print("\nPublishing a message and waiting for uppercase response\nSending message:", INPUT_MESSAGE)
 
-res = publish_obj.publishToQueueEndpoint(queue_name="queue_rest_consumer", 
-                                        message= INPUT_MESSAGE,
-                                        delivery_mode="persistent",
-                                        time_to_live= 10000 #waits 1 min
-                                        )
+res = publish.persistent_message_to_queue(queue_name="queue_rest_consumer", 
+                                          message= INPUT_MESSAGE,
+                                          time_to_live= 10000 #waits 1 min
+                                         )
 
 print("\nResponse:\n",res)
 

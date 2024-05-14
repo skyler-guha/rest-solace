@@ -27,35 +27,29 @@ Sending messages (for message-VPN in messaging mode):
 
     from rest_solace import MessagingPublisher
 
-    publisher_obj = MessagingPublisher(user_name= "admin", 
+    publish = MessagingPublisher(user_name= "admin", 
                                        password=" admin", 
                                        host= BROKER_IP, 
                                        rest_vpn_port= VPN_PORT #For 'default' VPN it is 9000
                                        )
 
-    #Publish directly to a queue
-    publish_obj.publishToQueueEndpoint(queue_name= "my_queue", 
-                                       message= "hello world!!",
-                                       delivery_mode= "direct")
+    #Publish to a queue
+    publish.direct_message_to_queue(queue_name= "my_queue",
+                                    message= "hello world!!")
     
-    #Publish for a given topic string
-    publish_obj.publishForTopic(topic_string= "test_topic", 
-                                message= "hello world!!",
-                                delivery_mode= "direct")
+    #Publish for a topic string
+    publish.direct_message_for_topic(topic_string= "test_topic", 
+                                     message= "hello world!!")
 
 
-    #Publish directly to a queue and wait for a reply from a consumer
-    response = publish_obj.publishToQueueEndpoint(queue_name= "my_queue", 
-                                                  message= "hello world!!",
-                                                  delivery_mode= "persistent",
-                                                  timeout= 120)
+    #Publish to a queue and wait for reply from a consumer
+    response = publish.persistent_message_to_queue(queue_name= "my_queue", 
+                                                   message= "hello world!!")                               
     print(response)
 
-    #Publish for a given topic string and wait for a reply from a consumer
-    response = publish_obj.publishForTopic(topic_string= "test_topic", 
-                                           message= "hello world!!",
-                                           delivery_mode= "persistent",
-                                           timeout= 120)
+    #Publish for a topic string and wait for reply from a consumer
+    response = publish.persistent_message_for_topic(topic_string= "test_topic", 
+                                                    message= "hello world!!")
     print(response)
 
 |
