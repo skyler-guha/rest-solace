@@ -4,6 +4,8 @@ NOTICE.txt
 README.rst
 pyproject.toml
 docs/development_refrences.rst
+docs/getting_started_with_solace.rst
+docs/index.rst
 src/rest_solace/__init__.py
 src/rest_solace/consumer.py
 src/rest_solace/exceptions.py

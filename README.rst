@@ -10,6 +10,7 @@ rest-solace
 Note: 
     | Right now the focus of this library is on the 'messaging' mode for solace message VPNs.
     | In the future I plan to add better support for 'gateway' mode as well.
+    | This library currently uses SEMPv2 for management. 
 
 Getting started with Solace:
 -----------------------------

@@ -23,17 +23,16 @@ class Manager():
 
     #info
     
-    def get_about(self, throw_exception= True)->dict:
-
-        endpoint = "/SEMP/v2/config/about"
-
-        res = self.http_client.http_get(endpoint= endpoint)
-        
-        if throw_exception:
-            res.raise_for_status()
-        return res.json()
-    
     def get_about_api(self, throw_exception= True)->dict:
+        """This provides metadata about the SEMP API, such as the version of the API supported by the broker.
+
+        Args:
+            throw_exception (bool, optional): Throw exception incase request error code indicates an error. 
+                                              Defaults to True.
+
+        Returns:
+            dict: Requested data.
+        """
 
         endpoint = "/SEMP/v2/config/about/api"
 
@@ -46,6 +45,7 @@ class Manager():
 
     #client profile
 
+    
     def fetch_all_client_profiles(self, msgVpnName= "default", select= "*"):
 
 
@@ -141,7 +141,10 @@ class Manager():
 
     # VPNs
 
-    def request_vpn_objects(self, count:int= 10, select= '*',throw_exception= True)->dict:
+    #Finished. Now need to give same options to fetch.
+    def request_vpn_objects(self, count:int= 10, where= None, 
+                            select= '*', opaquePassword= None,
+                            throw_exception= True)->dict:
         """Get list of message VPNs and info regarding them based on specified parameters.
         
         Note: 
@@ -149,21 +152,34 @@ class Manager():
             It is recommended that you use get_all_vpn_objects() function instead which grantees all info, but uses more bandwidth.
 
         For more info: 
-            https://docs.solace.com/Admin/SEMP/SEMP-Features.htm
             https://docs.solace.com/API-Developer-Online-Ref-Documentation/swagger-ui/software-broker/config/index.html#/msgVpn/getMsgVpns
 
         Args:
             count (int): Limits the number of objects in the response. default is 10.
-                         Ideally applications should always be written to handle pagination instead of massive counts.
-            select (str): Select only certain attributes to return. Give value 'msgVpnName,enabled' to see only names and enabled status.
-
-            throw_exception (bool, optional): _description_. Defaults to True.
+                         Ideally your applications should always be written to handle pagination instead of massive counts.
+            where (str): Specify that a response should include only objects that satisfy certain conditions.
+                         Expects comma-separated list of expressions. 
+                         All expressions must be true for the object to be included in the response.
+                         For more info, consult: https://docs.solace.com/Admin/SEMP/SEMP-Features.htm#Filtering
+            select (str): Select only certain attributes to return. 
+                          Expects comma-separated list of attribute names.
+                          Give value 'msgVpnName,enabled' to see only names and enabled status.
+                          For more info, consult: https://docs.solace.com/Admin/SEMP/SEMP-Features.htm#Select
+            opaquePassword (str): Password to retrieve attributes with the opaque property. 
+            throw_exception (bool, optional): Throw exception incase request error code indicates an error. 
+                                              Defaults to True.
 
         Returns:
-            _type_: _description_
+            dict: Requested data.
         """
 
         endpoint = f"/SEMP/v2/config/msgVpns?count={str(count)}&select={select}"
+
+        if where != None:
+            endpoint+="&where={where}"
+
+        if opaquePassword != None:
+            endpoint+="&opaquePassword={opaquePassword}"
 
         res = self.http_client.http_get(endpoint= endpoint)
         

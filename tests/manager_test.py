@@ -40,18 +40,6 @@ except Exception as e:
     exit(1)
 
 
-#Testing "get_about" function
-try:
-    count.add_count()
-    res = manager.get_about()
-    log.info("Function 'get_about': PASS")  
-    log.info(str(res)+'\n')
-    count.passed()
-except Exception as e:
-    count.failed()
-    log.info("Function 'get_about': FAIL")  
-    log.error("Error str: "+str(e))
-
 
 #Testing "get_about_api" function
 try:
