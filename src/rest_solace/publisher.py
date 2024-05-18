@@ -119,7 +119,8 @@ class MessagingPublisher():
             This library does not support subscribing to a topic endpoint.
 
         Args:
-            topic_string (str): A string used to attract published messages. It can contain wildcards to match with multiple sub topic-strings.
+            topic_string (str): A string used by an endpoint to attract published messages. 
+                                It can contain wildcards to match with multiple sub topic-strings.
             message (str): The message you wish to send.
             reply_to_queue (str | None, optional): After the message is received by the consumer, 
                                                    chose which queue the consumer reply will go to if provided.
@@ -250,7 +251,8 @@ class MessagingPublisher():
             This library does not support subscribing to a topic endpoint.
 
         Args:
-            topic_string (str): A string used to attract published messages. It can contain wildcards to match with multiple sub topic-strings.
+            topic_string (str): A string used by an endpoint to attract published messages. 
+            It can contain wildcards to match with multiple sub topic-strings.
             message (str): The message you wish to send.
             time_to_live (int | None, optional): Lifetime for a guaranteed message (in milliseconds). 
                                                  If the message is not delivered by this time limit,
@@ -300,3 +302,13 @@ class MessagingPublisher():
             return {"status_code":res.status_code, "headers":res.headers, 
                     "content":res.content, 'timeout':False}
 
+    #Async functions of the above 4 functions. (you will have to remake each one and with aiohttp)
+    
+
+    #A single sync function to send many messages based on parameters from list of dictionary (That you could import from a CSV)
+    #Should have flag to turn on and off async
+    #https://www.geeksforgeeks.org/load-csv-data-into-list-and-dictionary-using-python/
+
+
+#Add a class to validate inputs for the different functions.
+#this would validate input for all functions. Also makes it so you can validate all the input for the multi message function first.

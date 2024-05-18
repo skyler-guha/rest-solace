@@ -35,7 +35,7 @@ dependencies = [
     #"json",            #part of the standard library
     #"urllib"           #part of the standard library
 ]
-version = "0.0.2"
+version = "0.1.0"
 
 [project.urls]
 pypi = "https://pypi.org/project/rest-solace/"
