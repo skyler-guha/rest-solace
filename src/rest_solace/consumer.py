@@ -4,6 +4,7 @@ from datetime import datetime
 from typing import Callable
 from queue import Queue 
 from threading import Thread 
+import time
 
 
 
@@ -78,7 +79,9 @@ class Consumer:
 
     def startConsumer(self, host:str, port:int, 
                       callback_function:Callable= None, 
-                      log:bool= True, auto_stop:bool= False)->dict:
+                      log:bool= True, 
+                      auto_stop:bool= False,
+                      timeout:int= None)->dict:
         """Start a Consumer server with a given host and port value. 
         It will receive your messages if you register it as a consumer on your Rest Delivery Point.
 
@@ -93,6 +96,7 @@ class Consumer:
                                                     Defaults to None.
             log (bool, optional): To print logging info about incoming requests. Defaults to True.
             auto_stop (bool, optional): Stop after receiving a single message. Defaults to False.
+            timeout (int, optional): Timeout in seconds after which the consumer will automatically shutdown.
         """
 
         killer_queue = Queue(maxsize= 1)
@@ -111,14 +115,27 @@ class Consumer:
         server_thread = Thread(target = httpd.serve_forever) 
         server_thread.start()
          
+        #Add these in a thread with sleep func in the future so that the while loops do not hog cpu.
         try:
-            while True:
-                if killer_queue.get() == 1:
-                    if log: print("\nStopping server to return output...")
-                    httpd.shutdown()
-                    httpd.server_close()
-                    if log: print("Server stopped.")
-                    break
+            if timeout==None:
+                while True:
+                    if killer_queue.get() == 1:
+                        if log: print("\nStopping server to return output...")
+                        httpd.shutdown()
+                        httpd.server_close()
+                        if log: print("Server stopped.")
+                        break
+            
+            else:
+                timeout = time.time() + timeout
+                while True:
+                    if killer_queue.get() == 1 or time.time() > timeout:
+                        if log: print("\nStopping server to return output...")
+                        httpd.shutdown()
+                        httpd.server_close()
+                        if log: print("Server stopped.")
+                        break
+
         except KeyboardInterrupt: #It is expected that the user might want to only use ctrl+c to close the server in some cases.
             if log: print("\nStopping server due to keyboard interrupt...")
             httpd.shutdown()
