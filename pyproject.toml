@@ -26,16 +26,20 @@ classifiers = [
 ]
 dependencies = [
     "requests>=2.30.0",
+    "aiohttp>=3.9.5",
     #"http>=0.02",      #part of the standard library
     #"functools",       #part of the standard library
     #"datetime",        #part of the standard library
     #"typing",          #part of the standard library
     #"queue",           #part of the standard library
     #"threading",       #part of the standard library
+    #"time"             #part of the standard library
     #"json",            #part of the standard library
     #"urllib"           #part of the standard library
+    #"asyncio"          #part of the standard library
+    #"logging"          #part of the standard library
 ]
-version = "0.1.0"
+version = "0.2.0"
 
 [project.urls]
 pypi = "https://pypi.org/project/rest-solace/"

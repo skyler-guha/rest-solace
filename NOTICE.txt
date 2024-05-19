@@ -4,6 +4,9 @@ Copyright 2024 Skyler Guha
 This software uses "requests" library by Kenneth Reitz.
 It is licensed under "Apache 2.0 license".
 
+This software uses "aiohttp" library by aio-libs contributors, primarily  Nikolay Kim and Andrew Svetlov.
+It is licensed under "Apache 2.0 license".
+
 This software uses "http" library by The Python Software Foundation.
 It is licensed under "The Python Software Foundation License (PSFL)"
 
@@ -26,5 +29,11 @@ This software uses "json" library by The Python Software Foundation.
 It is licensed under "The Python Software Foundation License (PSFL)"
 
 This software uses "urllib" library by The Python Software Foundation.
+It is licensed under "The Python Software Foundation License (PSFL)"
+
+This software uses "asyncio" library by The Python Software Foundation.
+It is licensed under "The Python Software Foundation License (PSFL)"
+
+This software uses "logging" library by The Python Software Foundation.
 It is licensed under "The Python Software Foundation License (PSFL)"
 
