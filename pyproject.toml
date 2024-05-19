@@ -10,7 +10,7 @@ authors = [
 maintainers = [
   {name = "Skyler Guha", email = "skylerguha@gmail.com"}
 ]
-description = "REST based library for Solace Message Broker. Publish, Consume, & Manage!!"
+description = "REST API library for Solace Message Broker. Publish, Consume, & Manage!!"
 readme = "README.rst"
 requires-python = ">=3.8"
 keywords = ["solace", "rest", 
