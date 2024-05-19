@@ -607,7 +607,8 @@ class Manager():
 
         #step2
         if subscriptionTopic != None:
-            self.subscribe_to_topic_on_queue(subscriptionTopic= subscriptionTopic,
+            self.subscribe_to_topic_on_queue(msgVpnName= msgVpnName,
+                                             subscriptionTopic= subscriptionTopic,
                                              queueName= queueName)
             
         #step3
