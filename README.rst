@@ -26,7 +26,7 @@ It gives a brief explanation on the different components of solace; and that too
 
 Sending messages (for message-VPN in messaging mode):
 -----------------------------------------------------
-(Note: The first 4 functions in this example have async versions as well)
+(Note: The single message sending functions in this example have async versions as well)
 
 .. code-block:: python
 
