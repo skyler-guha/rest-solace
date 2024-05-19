@@ -159,11 +159,13 @@ Setting up a message VPN for message broking (in messaging mode):
                                   clientProfileName= "default",
                                   allowGuaranteedMsgReceiveEnabled= True,
                                   allowGuaranteedMsgSendEnabled= True)
-    manager.update_client_username(msgVpnName=NEW_VPN_NAME, 
+    manager.update_client_username(msgVpnName= NEW_VPN_NAME, 
                                    clientUsername= "default",
                                    enabled= True)
     manager.create_queue_endpoint(queueName='my_queue', msgVpnName=NEW_VPN_NAME)
-    manager.subscribe_to_topic_on_queue(subscriptionTopic= "test_topic", queueName= 'my_queue')
+    manager.subscribe_to_topic_on_queue(msgVpnName= NEW_VPN_NAME,
+                                        subscriptionTopic= "test_topic", 
+                                        queueName= 'my_queue')
     manager.create_rest_delivery_point(msgVpnName= NEW_VPN_NAME, 
                                        restDeliveryPointName= 'myRDP', 
                                        clientProfileName= "default")
