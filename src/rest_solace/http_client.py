@@ -100,27 +100,27 @@ class HttpClient:
                                headers= headers,
                                verify= self.verify_ssl)
     
+    ##Commented out as it is not needed. Keeping it for references.
+    # async def async_http_get(self, endpoint: str, headers:dict= None, timeout=None):
+    #     """async method to get the http endpoint
+    #     Args:
+    #         endpoint: endpoint string
 
-    async def async_http_get(self, endpoint: str, headers:dict= None, timeout=None):
-        """async method to get the http endpoint
-        Args:
-            endpoint: endpoint string
+    #     Raises:
+    #         HTTP GET request failed. with response status code or
+    #         HTTP error occurred while HTTP GET exception
+    #     """
+    #     url = f"{self.base_url}{endpoint}"
 
-        Raises:
-            HTTP GET request failed. with response status code or
-            HTTP error occurred while HTTP GET exception
-        """
-        url = f"{self.base_url}{endpoint}"
+    #     async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=self.verify_ssl),
+    #                                      auth= self.authHeaderAsync, 
+    #                                      headers= headers,
+    #                                      timeout= aiohttp.ClientTimeout(total= float(timeout))) as session:
 
-        async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=self.verify_ssl),
-                                         auth= self.authHeaderAsync, 
-                                         headers= headers,
-                                         timeout= timeout) as session:
-
-            return await session.get(url= url)
+    #         return await session.get(url= url)
         
     async def async_http_post(self, endpoint: str, payload:dict|str, 
-                        headers:dict= {'Content-Type': 'application/json'}, timeout=None):
+                              headers:dict= {'Content-Type': 'application/json'}, timeout=None):
         """async method for http post
         Args:
             endpoint: endpoint string
@@ -136,7 +136,7 @@ class HttpClient:
         async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=self.verify_ssl),
                                          auth= self.authHeaderAsync, 
                                          headers= headers,
-                                         timeout= timeout) as session:
+                                         timeout= aiohttp.ClientTimeout(total= float(timeout))) as session:
 
             return await session.post(url= url, data= json.dumps(payload))
     
