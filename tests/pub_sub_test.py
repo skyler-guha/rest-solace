@@ -56,6 +56,7 @@ print("\nPublishing a message and waiting for uppercase response\nSending messag
 
 res = publish.persistent_message_to_queue(queue_name="queue_rest_consumer", 
                                           message= INPUT_MESSAGE,
+                                          request_reply= True,
                                           time_to_live= 10000 #waits 1 min
                                          )
 

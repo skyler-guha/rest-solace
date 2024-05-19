@@ -3,6 +3,10 @@ rest-solace
 
 **rest-solace** is a rest based python library for Solace Message Broker that allows you to Publish, Consume, & Manage!!
 
+It is written with the intent to be easy to understand, functional, and pythonic.
+Input and output parameters for every function is always one of int, float, str, bool, list, dict and None; 
+making them directly compatible with json data types. 
+
 | Check it out at `PyPI <https://pypi.org/project/rest-solace/>`_.
 | View the code at `Github <https://github.com/skyler-guha/rest-solace/>`_.
 | Read the docs from `Here <https://github.com/skyler-guha/rest-solace/blob/master/docs/index.rst/>`_.
@@ -33,23 +37,36 @@ Sending messages (for message-VPN in messaging mode):
                                        rest_vpn_port= VPN_PORT #For 'default' VPN it is 9000
                                        )
 
-    #Publish to a queue
+    #Publish to a queue and (only confirms if the message was received by the broker)
     publish.direct_message_to_queue(queue_name= "my_queue",
                                     message= "hello world!!")
     
-    #Publish for a topic string
+    #Publish for a topic string (only confirms if the message was received by the broker)
     publish.direct_message_for_topic(topic_string= "test_topic", 
                                      message= "hello world!!")
 
 
+    #Publish to a queue and wait for confirmation on if the message was spooled into a queue
+    publish.persistent_message_to_queue(queue_name= "my_queue", 
+                                        message= "hello world!!",
+                                        request_reply= False)                               
+
+    #Publish for a topic string and wait for confirmation on if the message was spooled into a queue
+    publish.persistent_message_for_topic(topic_string= "test_topic", 
+                                         message= "hello world!!",
+                                         request_reply= False)
+
+
     #Publish to a queue and wait for reply from a consumer
     response = publish.persistent_message_to_queue(queue_name= "my_queue", 
-                                                   message= "hello world!!")                               
+                                                   message= "hello world!!",
+                                                   request_reply= True)                               
     print(response)
 
     #Publish for a topic string and wait for reply from a consumer
     response = publish.persistent_message_for_topic(topic_string= "test_topic", 
-                                                    message= "hello world!!")
+                                                    message= "hello world!!"
+                                                    request_reply= True)
     print(response)
 
 |
@@ -93,7 +110,7 @@ Receiving messages and sending back a response:
     
     return uppercase_response
 
-    #You can run this function on a septate thread if you want.
+    #You can run this function on a septate thread too if you want.
     consumer_obj.startConsumer(host= CONSUMER_HOST, 
                                port= CONSUMER_PORT,
                                callback_function= return_uppercase, 

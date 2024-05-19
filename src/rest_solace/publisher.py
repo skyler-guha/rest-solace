@@ -39,8 +39,8 @@ class MessagingPublisher():
                                       verify_ssl= verify_ssl)
 
     def direct_message_to_queue(self, queue_name:str, message:str, 
-                             reply_to_queue:str|None= None, reply_for_topic:str|None= None, 
-                             timeout:str|None= 120, throw_exception:bool= False)->dict:
+                                reply_to_queue:str|None= None, reply_for_topic:str|None= None, 
+                                timeout:str|None= 120, throw_exception:bool= False)->dict:
         
         """Publish a message to a queue endpoint in direct mode.
         'direct' mode is for sending messages without expecting a reply.
@@ -174,16 +174,19 @@ class MessagingPublisher():
             return {"status_code":res.status_code, "headers":res.headers, 
                     "content":res.content, 'timeout':False}
        
-    def persistent_message_to_queue(self, queue_name:str, message:str, 
-                                time_to_live:int|None= None, DMQ_eligible:bool= False,
-                                timeout:str|None= 120, throw_exception:bool= False)->dict:
+    def persistent_message_to_queue(self, queue_name:str, message:str, request_reply:bool= False,
+                                    time_to_live:int|None= None, DMQ_eligible:bool= False,
+                                    timeout:str|None= 120, throw_exception:bool= False)->dict:
         
         """Publish a message to a queue endpoint in persistent mode.
-        'persistent' mode is for getting a reply from the consumer to confirm if the message was received.
+        'persistent' mode is for sending a message and getting a confirmation from the broker if the message was spooled into a queue,
+        or for sending a message and getting reply from a consumer to confirm for sure the message was not just spooled but also received.
 
         Args:
             queue_name (str): Name of the queue endpoint you wish to publish to.
             message (str): The message you wish to send.
+            request_reply (bool): If false, tells the broker to just conform if the message was spooled into a queue.
+                                  if true, tells the broker to wait for a reply from the consumer and return that to confirm message delivery.
             time_to_live (int | None, optional): Lifetime for a guaranteed message (in milliseconds). 
                                                  If the message is not delivered by this time limit,
                                                  it is either discarded from the queue or moved to dead message queue if eligible.
@@ -208,8 +211,11 @@ class MessagingPublisher():
 
         headers = {'Content-Type': 'text/plain',
                    'Solace-Delivery-Mode': 'persistent',
-                   'Solace-Reply-Wait-Time-In-ms': "FOREVER" #specifies to broker that reply is expected
+                   'Solace-Reply-Wait-Time-In-ms': "FOREVER" 
                    }
+        
+        if request_reply == True:
+            headers['Solace-Reply-Wait-Time-In-ms'] = "FOREVER" #specifies to broker that reply is expected
 
         if time_to_live != None:
             headers['Solace-Time-To-Live-In-ms'] = str(time_to_live) #Time after which the message is removed from queue.
@@ -232,12 +238,13 @@ class MessagingPublisher():
             return {"status_code":res.status_code, "headers":res.headers, 
                     "content":res.content, 'timeout':False}
 
-    def persistent_message_for_topic(self, topic_string:str, message:str,
-                        time_to_live:int|None= None, DMQ_eligible:bool= False,
-                        timeout:str|None= 120, throw_exception:bool= False)->dict:
+    def persistent_message_for_topic(self, topic_string:str, message:str, request_reply:bool= False,
+                                    time_to_live:int|None= None, DMQ_eligible:bool= False,
+                                    timeout:str|None= 120, throw_exception:bool= False)->dict:
 
         """Publish a message for a specific topic. 
-        'persistent' mode is for getting a reply from the consumer to confirm if the message was received.
+        'persistent' mode is for sending a message and getting a confirmation from the broker if the message was spooled into a queue,
+        or for sending a message and getting reply from a consumer to confirm for sure the message was not just spooled but also received.
         A topic is a string that allows for attracting specific messages to specific endpoints.
         Endpoints subscribe to a specific topic string, and messages with matching strings go to those endpoints.
         Learn more at: https://docs.solace.com/Get-Started/what-are-topics.htm   
@@ -254,6 +261,8 @@ class MessagingPublisher():
             topic_string (str): A string used by an endpoint to attract published messages. 
             It can contain wildcards to match with multiple sub topic-strings.
             message (str): The message you wish to send.
+            request_reply (bool): If false, tells the broker to just conform if the message was spooled into a queue.
+                                  if true, tells the broker to wait for a reply from the consumer and return that to confirm message delivery.
             time_to_live (int | None, optional): Lifetime for a guaranteed message (in milliseconds). 
                                                  If the message is not delivered by this time limit,
                                                  it is either discarded from the queue or moved to dead message queue if eligible.
@@ -277,9 +286,11 @@ class MessagingPublisher():
         endpoint = f"/TOPIC/{topic_string}"
 
         headers = {'Content-Type': 'text/plain',
-                   'Solace-Delivery-Mode': 'persistent',
-                   'Solace-Reply-Wait-Time-In-ms': "FOREVER" #specifies to broker that reply is expected
+                   'Solace-Delivery-Mode': 'persistent'
                    }
+
+        if request_reply == True:
+            headers['Solace-Reply-Wait-Time-In-ms'] = "FOREVER" #specifies to broker that reply is expected
 
         if time_to_live != None:
             headers['Solace-Time-To-Live-In-ms'] = str(time_to_live) #Time after which the message is removed from queue.
@@ -303,7 +314,6 @@ class MessagingPublisher():
                     "content":res.content, 'timeout':False}
 
     #Async functions of the above 4 functions. (you will have to remake each one and with aiohttp)
-    
 
     #A single sync function to send many messages based on parameters from list of dictionary (That you could import from a CSV)
     #Should have flag to turn on and off async
