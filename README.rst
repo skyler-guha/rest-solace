@@ -4,7 +4,7 @@ rest-solace
 **rest-solace** is a rest based python library for Solace Message Broker that allows you to Publish, Consume, & Manage!!
 
 It is written with the intent to be easy to understand, functional, and pythonic.
-Input and output parameters for every function is always one of int, float, str, bool, list, dict and None; 
+Input and output parameters for almost every function is always one of int, float, str, bool, list, dict and None; 
 making them directly compatible with json data types. 
 
 Note: 
