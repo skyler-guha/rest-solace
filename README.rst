@@ -45,7 +45,7 @@ Sending messages (for message-VPN in messaging mode):
 
 
 *Publish to a queue and confirm if the message was received by the broker:*
----------------------------------------------------------------------
+----------------------------------------------------------------------------
 
 .. code-block:: python
 
@@ -61,7 +61,7 @@ Sending messages (for message-VPN in messaging mode):
 
 
 *Publish for a topic string and confirm if the message was received by the broker:*
------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
 
 .. code-block:: python
 
@@ -77,7 +77,7 @@ Sending messages (for message-VPN in messaging mode):
 
 
 *Publish to a queue and confirm if the message was received by the broker and spooled into the queue:*
------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------
 
 .. code-block:: python
 
@@ -95,7 +95,7 @@ Sending messages (for message-VPN in messaging mode):
 
 
 *Publish for a topic string and confirm if the message was received by the broker and spooled into a queue:*
------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
 
 .. code-block:: python
 
@@ -113,7 +113,7 @@ Sending messages (for message-VPN in messaging mode):
 
 
 *Publish to a queue and confirm if the message was received by the consumer by requesting a reply:*
-------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
 
 .. code-block:: python
 
@@ -133,7 +133,7 @@ Sending messages (for message-VPN in messaging mode):
 
 
 *Publish for a topic string and confirm if the message was received by a consumer by requesting a reply:*
-------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
 
 .. code-block:: python
 
@@ -179,7 +179,7 @@ Receiving messages and sending back a response:
 
 
 *Keep receiving messages and handle them through a callback function:*
--------------------------------------------------------------
+-------------------------------------------------------------------------
 
 .. code-block:: python
 
