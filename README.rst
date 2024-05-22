@@ -17,7 +17,7 @@ Note:
 | View the code at `Github <https://github.com/skyler-guha/rest-solace/>`_.
 | Read the docs from `Here <https://github.com/skyler-guha/rest-solace/blob/master/docs/index.rst/>`_.
 
-
+-----------------------------
 Getting started with Solace:
 -----------------------------
 If you are new to solace and confused about the terminology and workflows around it, it is **highly** recommended 
@@ -26,57 +26,142 @@ It gives a brief explanation on the different components of solace; and that too
 
 |
 
+-----------------------------------------------------
 Sending messages (for message-VPN in messaging mode):
 -----------------------------------------------------
-(Note: The single message sending functions in this example have async versions as well)
+
+*Creating a publisher object:*
+-------------------------------
 
 .. code-block:: python
 
     from rest_solace import MessagingPublisher
 
     publish = MessagingPublisher(user_name= "admin", 
-                                       password=" admin", 
-                                       host= BROKER_IP, 
-                                       rest_vpn_port= VPN_PORT #For 'default' VPN it is 9000
-                                       )
+                                 password=" admin", 
+                                 host= BROKER_IP, 
+                                 rest_vpn_port= VPN_PORT #For 'default' VPN it is 9000
+                                )
 
-    #Publish to a queue (only confirms if the message was received by the broker)
+
+*Publish to a queue and confirm if the message was received by the broker:*
+---------------------------------------------------------------------
+
+.. code-block:: python
+
+    #Synchronous method
     publish.direct_message_to_queue(queue_name= "my_queue",
                                     message= "hello world!!")
-    
-    #Publish for a topic string (only confirms if the message was received by the broker)
+
+    #Asynchronous method
+    import asyncio
+    coroutine_obj= async_direct_message_to_queue(queue_name= "my_queue",
+                                                 message= "hello world!!")
+    asyncio.run(coroutine_obj)
+
+
+*Publish for a topic string and confirm if the message was received by the broker:*
+-----------------------------------------------------------------------------
+
+.. code-block:: python
+
+    #Synchronous method
     publish.direct_message_for_topic(topic_string= "test_topic", 
                                      message= "hello world!!")
 
+    #Asynchronous method
+    import asyncio
+    coroutine_obj= publish.async_direct_message_for_topic(topic_string= "test_topic", 
+                                                          message= "hello world!!")
+    asyncio.run(coroutine_obj)
 
-    #Publish to a queue and wait to confirm if the message was spooled into a queue
+
+*Publish to a queue and confirm if the message was received by the broker and spooled into the queue:*
+-----------------------------------------------------------------------------
+
+.. code-block:: python
+
+    #Synchronous method
     publish.persistent_message_to_queue(queue_name= "my_queue", 
                                         message= "hello world!!",
-                                        request_reply= False)                               
+                                        request_reply= False)
 
-    #Publish for a topic string and wait to confirm if the message was spooled into a queue
+    #Asynchronous method
+    import asyncio
+    coroutine_obj= publish.async_persistent_message_to_queue(queue_name= "my_queue", 
+                                                             message= "hello world!!",
+                                                             request_reply= False)
+    asyncio.run(coroutine_obj)
+
+
+*Publish for a topic string and confirm if the message was received by the broker and spooled into a queue:*
+-----------------------------------------------------------------------------
+
+.. code-block:: python
+
+    #Synchronous method
     publish.persistent_message_for_topic(topic_string= "test_topic", 
                                          message= "hello world!!",
                                          request_reply= False)
 
+    #Asynchronous method
+    import asyncio
+    coroutine_obj= publish.async_persistent_message_for_topic(topic_string= "test_topic", 
+                                                              message= "hello world!!",
+                                                              request_reply= False)
+    asyncio.run(coroutine_obj)
 
-    #Publish to a queue and wait for reply from a consumer
+
+*Publish to a queue and confirm if the message was received by the consumer by requesting a reply:*
+------------------------------------------------------------------------------
+
+.. code-block:: python
+
+    #Synchronous method
     response = publish.persistent_message_to_queue(queue_name= "my_queue", 
                                                    message= "hello world!!",
                                                    request_reply= True)                               
     print(response)
 
-    #Publish for a topic string and wait for reply from a consumer
+    #Asynchronous method
+    import asyncio
+    coroutine_obj= publish.async_persistent_message_to_queue(queue_name= "my_queue", 
+                                                             message= "hello world!!",
+                                                             request_reply= True)
+    response= asyncio.run(coroutine_obj)
+    print(response)
+
+
+*Publish for a topic string and confirm if the message was received by a consumer by requesting a reply:*
+------------------------------------------------------------------------------------
+
+.. code-block:: python
+
+    #Synchronous method
     response = publish.persistent_message_for_topic(topic_string= "test_topic", 
                                                     message= "hello world!!"
-                                                    request_reply= True)
+                                                    request_reply= True)                           
     print(response)
+
+    #Asynchronous method
+    import asyncio
+    coroutine_obj= publish.async_persistent_message_for_topic(topic_string= "test_topic", 
+                                                              message= "hello world!!"
+                                                              request_reply= True)
+    response= asyncio.run(coroutine_obj)
+    print(response)
+
 
 |
 
+-----------------------------------------------
 Receiving messages and sending back a response:
 -----------------------------------------------
 (You can use your own REST server too. The one included with this library is only for simple uses and testing)
+
+
+*Receive a single message and get the value returned to you:*
+-------------------------------------------------------------
 
 .. code-block:: python
 
@@ -92,7 +177,15 @@ Receiving messages and sending back a response:
     print(incoming_message)
 
 
-    #Keep receiving messages and handle them through a callback function
+
+*Keep receiving messages and handle them through a callback function:*
+-------------------------------------------------------------
+
+.. code-block:: python
+
+    from rest_solace import Consumer
+
+    consumer_obj = Consumer()
 
     def return_uppercase(event:dict, kill_function):
     """Convert request message string to upper case to return as response.
@@ -121,6 +214,7 @@ Receiving messages and sending back a response:
 
 |
 
+------------------------------------------------------------------
 Setting up a message VPN for message broking (in messaging mode):
 ------------------------------------------------------------------
 (This is a bit advance but the library includes lots of utility functions to make initial setup easy)

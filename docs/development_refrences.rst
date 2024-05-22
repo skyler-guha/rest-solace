@@ -8,7 +8,7 @@ Example text.
 
 .. contents:: Table of Contents
 
-Header 2
+*Header 2*
 --------
 
 
