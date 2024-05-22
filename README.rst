@@ -112,7 +112,7 @@ Sending messages (for message-VPN in messaging mode):
     asyncio.run(coroutine_obj)
 
 
-*Publish to a queue and confirm if the message was received by the consumer by requesting a reply:*
+*Publish to a queue and confirm if the message was received by a consumer by requesting a reply:*
 -----------------------------------------------------------------------------------------------------
 
 .. code-block:: python
