@@ -7,14 +7,16 @@ It is written with the intent to be easy to understand, functional, and pythonic
 Input and output parameters for every function is always one of int, float, str, bool, list, dict and None; 
 making them directly compatible with json data types. 
 
-| Check it out at `PyPI <https://pypi.org/project/rest-solace/>`_.
-| View the code at `Github <https://github.com/skyler-guha/rest-solace/>`_.
-| Read the docs from `Here <https://github.com/skyler-guha/rest-solace/blob/master/docs/index.rst/>`_.
-
 Note: 
     | Right now the focus of this library is on the 'messaging' mode for solace message VPNs.
     | In the future I plan to add better support for 'gateway' mode as well.
     | This library currently uses SEMPv2 for management. 
+
+|
+| Check it out at `PyPI <https://pypi.org/project/rest-solace/>`_.
+| View the code at `Github <https://github.com/skyler-guha/rest-solace/>`_.
+| Read the docs from `Here <https://github.com/skyler-guha/rest-solace/blob/master/docs/index.rst/>`_.
+
 
 Getting started with Solace:
 -----------------------------
@@ -38,7 +40,7 @@ Sending messages (for message-VPN in messaging mode):
                                        rest_vpn_port= VPN_PORT #For 'default' VPN it is 9000
                                        )
 
-    #Publish to a queue and (only confirms if the message was received by the broker)
+    #Publish to a queue (only confirms if the message was received by the broker)
     publish.direct_message_to_queue(queue_name= "my_queue",
                                     message= "hello world!!")
     
@@ -47,12 +49,12 @@ Sending messages (for message-VPN in messaging mode):
                                      message= "hello world!!")
 
 
-    #Publish to a queue and wait for confirmation on if the message was spooled into a queue
+    #Publish to a queue and wait to confirm if the message was spooled into a queue
     publish.persistent_message_to_queue(queue_name= "my_queue", 
                                         message= "hello world!!",
                                         request_reply= False)                               
 
-    #Publish for a topic string and wait for confirmation on if the message was spooled into a queue
+    #Publish for a topic string and wait to confirm if the message was spooled into a queue
     publish.persistent_message_for_topic(topic_string= "test_topic", 
                                          message= "hello world!!",
                                          request_reply= False)
