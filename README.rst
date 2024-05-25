@@ -1,5 +1,9 @@
-rest-solace
+rest-solace 
 ===============
+
+.. image:: https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fpypistats.org%2Fpackages%2Frest-solace&query=substring-after(%2Fhtml%2Fbody%2Fdiv%2Fsection%2Fp%20%2C%20'Downloads%20last%20month%3A')&label=PyPI%20downloads%20last%20month%3A&color=%2332CD32
+   :alt: Dynamic XML Badge
+
 
 **rest-solace** is a rest based python library for Solace Message Broker that allows you to Publish, Consume, & Manage!!
 
@@ -13,7 +17,7 @@ Note:
     | This library currently uses SEMPv2 for management. 
 
 |
-| Check it out at `PyPI <https://pypi.org/project/rest-solace/>`_.
+| Check it out at `PyPI <https://pypi.org/project/rest-solace/>`_. 
 | View the code at `Github <https://github.com/skyler-guha/rest-solace/>`_.
 | Read the docs from `Here <https://github.com/skyler-guha/rest-solace/blob/master/docs/index.rst/>`_.
 
@@ -279,8 +283,14 @@ Setting up a message VPN for message broking (in messaging mode):
     #Turning your RDP off and on again (Useful if solace has trouble connecting to your consumer)
     manager.restart_rest_delivery_point(msgVpnName= NEW_VPN_NAME, restDeliveryPointName= 'myRDP')
 
-    
+..
+   _url to get download data: https://pypistats.org/packages/rest-solace
 
+..
+    _xpath string to get download data: substring-after(/html/body/div/section/p , 'Downloads last month:')
+
+..
+    _Create badge using XML/HTML data at: https://shields.io/badges/dynamic-xml-badge 
 
     
 ..
