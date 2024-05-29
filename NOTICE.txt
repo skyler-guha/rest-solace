@@ -37,3 +37,6 @@ It is licensed under "The Python Software Foundation License (PSFL)"
 This software uses "logging" library by The Python Software Foundation.
 It is licensed under "The Python Software Foundation License (PSFL)"
 
+This software uses "warnings" library by The Python Software Foundation.
+It is licensed under "The Python Software Foundation License (PSFL)"
+
