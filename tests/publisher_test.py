@@ -158,28 +158,55 @@ async def test_async_persistent_message_for_topic():
         print(e)
     teardown()
 
+def test_send_messages():
+    print("\nTesting Function: 'send_messages'")
+    #setup()
+
+    manager.create_message_vpn(msgVpnName= NEW_VPN_NAME,
+                           serviceRestIncomingPlainTextListenPort= NEW_VPN_PORT)
+
+    manager.auto_rest_messaging_setup_utility(msgVpnName= NEW_VPN_NAME, queueName= 'queue_rest_consumer', subscriptionTopic='my_topic', 
+                                              restDeliveryPointName='myRDP', restConsumerName='myConsumer', 
+                                              remoteHost= CONSUMER_HOST, remotePort= CONSUMER_PORT)
+
+    try:
+        res = publish.send_messages(data= "test_data.json")
+        print("\nResponse:\n",res)
+    except Exception as e:
+        print(e)
+
+    manager.delete_queue_endpoint(msgVpnName= NEW_VPN_NAME, queueName= 'queue_rest_consumer')
+    manager.delete_rest_delivery_point(msgVpnName= NEW_VPN_NAME, restDeliveryPointName= 'myRDP')
+    manager.delete_message_vpn(msgVpnName= NEW_VPN_NAME)
+    #teardown()
 
 #Running all sync tests
-test_direct_message_to_queue()
-time.sleep(10)
-test_direct_message_for_topic()
-time.sleep(10)
-test_persistent_message_to_queue()
-time.sleep(10)
-test_persistent_message_for_topic()
-time.sleep(10)
+# test_direct_message_to_queue()
+# time.sleep(10)
+# test_direct_message_for_topic()
+# time.sleep(10)
+# test_persistent_message_to_queue()
+# time.sleep(10)
+# test_persistent_message_for_topic()
+# time.sleep(10)
 
-#Running all async tests
-asyncio.run(test_async_direct_message_to_queue())
-time.sleep(15)
-asyncio.run(test_async_direct_message_for_topic())
-time.sleep(15)
-asyncio.run(test_async_persistent_message_to_queue())
-time.sleep(15)
-asyncio.run(test_async_persistent_message_for_topic())
+# #Running all async tests
+# asyncio.run(test_async_direct_message_to_queue())
+# time.sleep(15)
+# asyncio.run(test_async_direct_message_for_topic())
+# time.sleep(15)
+# asyncio.run(test_async_persistent_message_to_queue())
+# time.sleep(15)
+# asyncio.run(test_async_persistent_message_for_topic())
+
+test_send_messages()
+
+#co = publish.async_direct_message_to_queue(queue_name= "my_queue", message= "hello world!!")
 
 
+#coroutine_obj=  asyncio.run(publish.async_direct_message_to_queue(queue_name= "my_queue", message= "hello world!!"))
 
+#print(coroutine_obj)
 
 
 

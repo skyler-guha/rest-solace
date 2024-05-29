@@ -1,3 +1,6 @@
+import json
+import asyncio
+import warnings
 from .http_client import HttpClient
 from requests.exceptions import ReadTimeout
 from aiohttp.client_exceptions import ServerTimeoutError
@@ -14,8 +17,10 @@ class MessagingPublisher():
             host (str): Broker address (IPv4)
             rest_vpn_port (str): The port assigned on your vpn of interest where you wish to send messages through REST messaging.
                                 We use this port so specify which VPN we wish to send our messages to.
+            verify_ssl (bool): Enable SSL (Does not work as of yet)
         """
 
+        #Default client params
         self.http_client = HttpClient(host= host,
                                       port= rest_vpn_port,
                                       user_name= user_name,
@@ -23,15 +28,17 @@ class MessagingPublisher():
                                       verify_ssl= verify_ssl)
         
     def update_parameters(self, user_name:str, password:str,
-                          host:str, rest_vpn_port:str, verify_ssl=False):
-        """Update parameters used to connect with the broker.
+                          host:str, rest_vpn_port:str, verify_ssl=False)->None:
+        """Update the default parameters used to connect with the broker.
 
         Args:
             username (str): Username of user with admin level access to the broker.
             password (str): Password for the username provided.
             host (str): Broker address (IPv4)
             rest_vpn_port (str): The port assigned on your vpn of interest where you wish to send messages through REST messaging.
-                                We use this port so specify which VPN we wish to send our messages to.        """
+                                We use this port so specify which VPN we wish to send our messages to.        
+            verify_ssl (bool): Enable SSL (Does not work as of yet)
+        """
         
         self.http_client = HttpClient(host= host,
                                       port= rest_vpn_port,
@@ -41,7 +48,7 @@ class MessagingPublisher():
 
     def direct_message_to_queue(self, queue_name:str, message:str, 
                                 reply_to_queue:str|None= None, reply_for_topic:str|None= None, 
-                                timeout:str|None= 120, throw_exception:bool= False)->dict:
+                                timeout:int|None= 120, throw_exception:bool= False)->dict:
         
         """Publish a message to a queue endpoint in direct mode.
         'direct' mode is for sending messages without expecting a reply.
@@ -62,6 +69,7 @@ class MessagingPublisher():
             timeout (str | None, optional): http/https request timeout set on the client side. Defaults to 120.
             throw_exception (bool, optional): Throw exception incase request error code indicates an error or timeout has been reached.
                                               Defaults to False.
+            client_params (dict, optional): Use custom http client params instead of using the ones 
 
         Raises:
             ValueError: Can only select either 'reply_to_queue' or 'reply_for_topic', not both.
@@ -103,7 +111,7 @@ class MessagingPublisher():
        
     def direct_message_for_topic(self, topic_string:str, message:str, 
                         reply_to_queue:str|None= None, reply_for_topic:str|None= None, 
-                        timeout:str|None= 120, throw_exception:bool= False)->dict:
+                        timeout:int|None= 120, throw_exception:bool= False)->dict:
 
         """Publish a message for a specific topic. 
         'direct' mode is for sending messages without expecting a reply.
@@ -177,7 +185,7 @@ class MessagingPublisher():
        
     def persistent_message_to_queue(self, queue_name:str, message:str, request_reply:bool= False,
                                     time_to_live:int|None= None, DMQ_eligible:bool= False,
-                                    timeout:str|None= 120, throw_exception:bool= False)->dict:
+                                    timeout:int|None= 120, throw_exception:bool= False)->dict:
         
         """Publish a message to a queue endpoint in persistent mode.
         'persistent' mode is for sending a message and getting a confirmation from the broker if the message was spooled into a queue,
@@ -241,7 +249,7 @@ class MessagingPublisher():
 
     def persistent_message_for_topic(self, topic_string:str, message:str, request_reply:bool= False,
                                     time_to_live:int|None= None, DMQ_eligible:bool= False,
-                                    timeout:str|None= 120, throw_exception:bool= False)->dict:
+                                    timeout:int|None= 120, throw_exception:bool= False)->dict:
 
         """Publish a message for a specific topic. 
         'persistent' mode is for sending a message and getting a confirmation from the broker if the message was spooled into a queue,
@@ -314,13 +322,11 @@ class MessagingPublisher():
             return {"status_code":res.status_code, "headers":res.headers, 
                     "content":res.content, 'timeout':False}
 
-    #Async functions of the above 4 functions. (you will have to remake each one and with aiohttp)
-
     async def async_direct_message_to_queue(self, queue_name:str, message:str, 
                                             reply_to_queue:str|None= None, reply_for_topic:str|None= None, 
-                                            timeout:str|None= 120, throw_exception:bool= False)->dict:
+                                            timeout:int|None= 120, throw_exception:bool= False)->dict:
         
-        """Publish a message to a queue endpoint in direct mode.
+        """Publish a message to a queue endpoint in direct mode asynchronously.
         'direct' mode is for sending messages without expecting a reply.
 
         Args:
@@ -382,9 +388,9 @@ class MessagingPublisher():
        
     async def async_direct_message_for_topic(self, topic_string:str, message:str, 
                                              reply_to_queue:str|None= None, reply_for_topic:str|None= None, 
-                                             timeout:str|None= 120, throw_exception:bool= False)->dict:
+                                             timeout:int|None= 120, throw_exception:bool= False)->dict:
 
-        """Publish a message for a specific topic. 
+        """Publish a message for a specific topic asynchronously.
         'direct' mode is for sending messages without expecting a reply.
         A topic is a string that allows for attracting specific messages to specific endpoints.
         Endpoints subscribe to a specific topic string, and messages with matching strings go to those endpoints.
@@ -458,9 +464,9 @@ class MessagingPublisher():
        
     async def async_persistent_message_to_queue(self, queue_name:str, message:str, request_reply:bool= False,
                                                 time_to_live:int|None= None, DMQ_eligible:bool= False,
-                                                timeout:str|None= 120, throw_exception:bool= False)->dict:
+                                                timeout:int|None= 120, throw_exception:bool= False)->dict:
         
-        """Publish a message to a queue endpoint in persistent mode.
+        """Publish a message to a queue endpoint in persistent mode asynchronously.
         'persistent' mode is for sending a message and getting a confirmation from the broker if the message was spooled into a queue,
         or for sending a message and getting reply from a consumer to confirm for sure the message was not just spooled but also received.
 
@@ -524,9 +530,9 @@ class MessagingPublisher():
 
     async def async_persistent_message_for_topic(self, topic_string:str, message:str, request_reply:bool= False,
                                                  time_to_live:int|None= None, DMQ_eligible:bool= False,
-                                                 timeout:str|None= 120, throw_exception:bool= False)->dict:
+                                                 timeout:int|None= 120, throw_exception:bool= False)->dict:
 
-        """Publish a message for a specific topic. 
+        """Publish a message for a specific topic asynchronously.
         'persistent' mode is for sending a message and getting a confirmation from the broker if the message was spooled into a queue,
         or for sending a message and getting reply from a consumer to confirm for sure the message was not just spooled but also received.
         A topic is a string that allows for attracting specific messages to specific endpoints.
@@ -600,11 +606,75 @@ class MessagingPublisher():
                     "content":content.decode("utf8"), 'timeout':False}
 
 
+    def send_messages(self, data:list|str, async_mode= True):
+        """Send multiple messages in a batch.
 
-    #A single sync function to send many messages based on parameters from list of dictionary (That you could import from a CSV)
-    #Should have flag to turn on and off async
-    #https://www.geeksforgeeks.org/load-csv-data-into-list-and-dictionary-using-python/
+        Args:
+            data (list | str): Either a list of dictionaries containing message data, 
+            or a string containing path to a json file with the data.
+            async_mode (bool, optional): To send the message asynchronously or not. Defaults to True.
 
+        Returns:
+            list: Output values.
+        """
+        
+        warnings.warn('This function is experimental.\
+                      It does no validation nor is designed to properly handel errors. \
+                      Its features can be changed in the future.')
+        
+        if isinstance(data, str):
 
-#Add a class to validate inputs for the different functions.
-#this would validate input for all functions. Also makes it so you can validate all the input for the multi message function first.
+            with open(file=data, encoding='utf-8') as json_file:
+                data = json.load(json_file)
+
+        if async_mode == True:
+
+            async_functions= {"direct_message_to_queue": self.async_direct_message_to_queue,
+                              "direct_message_for_topic": self.async_direct_message_for_topic,
+                              "persistent_message_to_queue": self.async_persistent_message_to_queue,
+                              "persistent_message_for_topic": self.async_persistent_message_for_topic}
+
+            async def run_functions(data):
+
+                coroutines = list()
+
+                for message_object in data:
+
+                    func_name = list(message_object)[0]
+
+                    func_params = message_object[func_name]
+
+                    func_obj = async_functions[func_name]
+
+                    coroutines.append( func_obj( **func_params ))
+
+                awaited_results = await asyncio.gather(*coroutines)
+                return awaited_results
+
+            
+            results = asyncio.run(run_functions(data))
+
+            return results                
+
+        elif async_mode == False:
+            
+            sync_functions= {"direct_message_to_queue": self.direct_message_to_queue,
+                             "direct_message_for_topic": self.direct_message_for_topic,
+                             "persistent_message_to_queue": self.persistent_message_to_queue,
+                             "persistent_message_for_topic": self.persistent_message_for_topic}
+            
+            for message_object in data:
+
+                func_name = list(message_object)[0]
+
+                func_params = message_object[func_name]
+
+                func_obj = sync_functions[func_name]
+
+                func_obj( **func_params )
+            
+        else:
+
+            pass
+
+            
