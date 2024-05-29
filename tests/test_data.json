@@ -1,0 +1,18 @@
+[
+    {
+        "direct_message_to_queue": {
+            "queue_name": "queue_rest_consumer",
+            "message": "hello world!!",
+            "timeout": 120,
+            "throw_exception": false
+        }
+    },
+    {
+        "direct_message_for_topic": {
+            "topic_string": "my_topic",
+            "message": "hello world!!",
+            "timeout": 120,
+            "throw_exception": false
+        }
+    }
+]
