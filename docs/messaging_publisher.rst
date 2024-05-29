@@ -89,7 +89,6 @@ Example:
 
 .. code-block:: python
 
-    #Synchronous method
     publish.direct_message_to_queue(queue_name= "my_queue",
                                     message= "hello world!!")
 
@@ -140,7 +139,6 @@ Example:
 
 .. code-block:: python
 
-    #Synchronous method
     publish.direct_message_for_topic(topic_string= "test_topic", 
                                      message= "hello world!!")
 
@@ -181,7 +179,6 @@ Example:
 
 .. code-block:: python
 
-    #Synchronous method
     response = publish.persistent_message_to_queue(queue_name= "my_queue", 
                                                    message= "hello world!!",
                                                    request_reply= True)                               
@@ -234,7 +231,6 @@ Example:
 
 .. code-block:: python
 
-    #Synchronous method
     response = publish.persistent_message_for_topic(topic_string= "test_topic", 
                                                     message= "hello world!!"
                                                     request_reply= True)                           
