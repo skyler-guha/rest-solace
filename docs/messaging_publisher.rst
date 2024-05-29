@@ -29,7 +29,7 @@ Example:
 
 
 *Function: update_parameters*
---------------------
+-------------------------------
 Update the default parameters used to connect with the broker.
 
 Args:
@@ -55,7 +55,7 @@ Example:
 
 
 *Function: direct_message_to_queue*
-----------------------------------------------------------------------------
+------------------------------------
 Publish a message to a queue endpoint in direct mode.
 'direct' mode is for sending messages without expecting a reply.
 
@@ -95,7 +95,7 @@ Example:
 
 
 *Function: direct_message_for_topic*
--------------------------------------------------------------------------------------
+--------------------------------------
 Publish a message for a specific topic. 
 'direct' mode is for sending messages without expecting a reply.
 A topic is a string that allows for attracting specific messages to specific endpoints.
@@ -148,7 +148,7 @@ Example:
 
 
 *Function: persistent_message_to_queue*
------------------------------------------------------------------------------------------------------
+----------------------------------------
 Publish a message to a queue endpoint in persistent mode.
 'persistent' mode is for sending a message and getting a confirmation from the broker if the message was spooled into a queue,
 or for sending a message and getting reply from a consumer to confirm for sure the message was not just spooled but also received.
@@ -189,7 +189,7 @@ Example:
 
 
 *Function: persistent_message_for_topic*
------------------------------------------------------------------------------------------------------------
+------------------------------------------
 Publish a message for a specific topic. 
 'persistent' mode is for sending a message and getting a confirmation from the broker if the message was spooled into a queue,
 or for sending a message and getting reply from a consumer to confirm for sure the message was not just spooled but also received.
@@ -242,7 +242,7 @@ Example:
 
 
 *Function: async_direct_message_to_queue*
-----------------------------------------------------------------------------
+------------------------------------------
 Publish a message to a queue endpoint in direct mode asynchronously.
 'direct' mode is for sending messages without expecting a reply.
 
@@ -283,7 +283,7 @@ Example:
 
 
 *Function: async_direct_message_for_topic*
--------------------------------------------------------------------------------------
+-------------------------------------------
 Publish a message for a specific topic. 
 'direct' mode is for sending messages without expecting a reply asynchronously.
 A topic is a string that allows for attracting specific messages to specific endpoints.
@@ -335,7 +335,7 @@ Example:
 
 
 *Function: async_persistent_message_to_queue*
------------------------------------------------------------------------------------------------------
+-----------------------------------------------
 Publish a message to a queue endpoint in persistent mode asynchronously.
 'persistent' mode is for sending a message and getting a confirmation from the broker if the message was spooled into a queue,
 or for sending a message and getting reply from a consumer to confirm for sure the message was not just spooled but also received.
@@ -377,7 +377,7 @@ Example:
 
 
 *Function: async_persistent_message_for_topic*
------------------------------------------------------------------------------------------------------------
+------------------------------------------------
 Publish a message for a specific topic asynchronously. 
 'persistent' mode is for sending a message and getting a confirmation from the broker if the message was spooled into a queue,
 or for sending a message and getting reply from a consumer to confirm for sure the message was not just spooled but also received.
@@ -431,7 +431,7 @@ Example:
 
 
 *Function: send_messages (EXPERIMENTAL)*
---------------------
+-------------------------------------------
 Send multiple messages in a batch.
 
 Args:
