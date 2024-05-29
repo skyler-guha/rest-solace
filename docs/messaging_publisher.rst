@@ -8,12 +8,12 @@ Messaging Publisher Class (for sending messages through message-VPN in messaging
 Class for creating a Publisher object for communicating with a broker to publish a message in Messaging mode.
 
 Args:
-- username (str): Username of user with admin level access to the broker.
-- password (str): Password for the username provided.
-- host (str): Broker address (IPv4)
-- rest_vpn_port (str): The port assigned on your vpn of interest where you wish to send messages through REST messaging.
+ - username (str): Username of user with admin level access to the broker.
+ - password (str): Password for the username provided.
+ - host (str): Broker address (IPv4)
+ - rest_vpn_port (str): The port assigned on your vpn of interest where you wish to send messages through REST messaging.
                     We use this port so specify which VPN we wish to send our messages to.
-- verify_ssl (bool): Enable SSL (Does not work as of yet)
+ - verify_ssl (bool): Enable SSL (Does not work as of yet)
 
 Example: 
 
@@ -33,15 +33,15 @@ Example:
 Update the default parameters used to connect with the broker.
 
 Args:
-- username (str): Username of user with admin level access to the broker.
-- password (str): Password for the username provided.
-- host (str): Broker address (IPv4)
-- rest_vpn_port (str): The port assigned on your vpn of interest where you wish to send messages through REST messaging.
+ - username (str): Username of user with admin level access to the broker.
+ - password (str): Password for the username provided.
+ - host (str): Broker address (IPv4)
+ - rest_vpn_port (str): The port assigned on your vpn of interest where you wish to send messages through REST messaging.
                     We use this port so specify which VPN we wish to send our messages to.        
-- verify_ssl (bool): Enable SSL (Does not work as of yet)
+ - verify_ssl (bool): Enable SSL (Does not work as of yet)
 
 Returns:
-- None
+ - None
 
 Example:
 
@@ -60,29 +60,29 @@ Publish a message to a queue endpoint in direct mode.
 'direct' mode is for sending messages without expecting a reply.
 
 Args:
-- queue_name (str): Name of the queue endpoint you wish to publish to.
-- message (str): The message you wish to send.
-- reply_to_queue (str | None, optional): After the message is received by the consumer, 
+ - queue_name (str): Name of the queue endpoint you wish to publish to.
+ - message (str): The message you wish to send.
+ - reply_to_queue (str | None, optional): After the message is received by the consumer, 
                                         chose which queue the consumer reply will go to if provided.
                                         The value must be the name of a queue.
                                         Only works in 'direct' delivery mode.
                                         Defaults to None.
-- reply_for_topic (str | None, optional): After the message is received by the consumer, 
+ - reply_for_topic (str | None, optional): After the message is received by the consumer, 
                                         chose which topic string the consumer reply will go to if provided.
                                         The value must be a topic string (NOT the name of a topic endpoint).
                                         Only works in 'direct' delivery mode.
                                         Defaults to None.
-- timeout (str | None, optional): http/https request timeout set on the client side. Defaults to 120.
-- throw_exception (bool, optional): Throw exception incase request error code indicates an error or timeout has been reached.
+ - timeout (str | None, optional): http/https request timeout set on the client side. Defaults to 120.
+ - throw_exception (bool, optional): Throw exception incase request error code indicates an error or timeout has been reached.
                                     Defaults to False.
-- client_params (dict, optional): Use custom http client params instead of using the ones 
+ - client_params (dict, optional): Use custom http client params instead of using the ones 
 
 Raises:
-- ValueError: Can only select either 'reply_to_queue' or 'reply_for_topic', not both.
-- HTTPError: Return code for request indicates an error
+ - ValueError: Can only select either 'reply_to_queue' or 'reply_for_topic', not both.
+ - HTTPError: Return code for request indicates an error
 
 Returns:
-- dict: Dictionary containing request information and {'timeout':False}.
+ - dict: Dictionary containing request information and {'timeout':False}.
         Incase timeout is reached, returned dictionary only contains {'timeout':True}.
 
 Example: 
@@ -111,29 +111,29 @@ Note:
     This library does not support subscribing to a topic endpoint.
 
 Args:
-- topic_string (str): A string used by an endpoint to attract published messages. 
+ - topic_string (str): A string used by an endpoint to attract published messages. 
                     It can contain wildcards to match with multiple sub topic-strings.
-- message (str): The message you wish to send.
-- reply_to_queue (str | None, optional): After the message is received by the consumer, 
+ - message (str): The message you wish to send.
+ - reply_to_queue (str | None, optional): After the message is received by the consumer, 
                                         chose which queue the consumer reply will go to if provided.
                                         The value must be the name of a queue.
                                         Only works in 'direct' delivery mode.
                                         Defaults to None.
-- reply_for_topic (str | None, optional): After the message is received by the consumer, 
+ - reply_for_topic (str | None, optional): After the message is received by the consumer, 
                                         chose which topic string the consumer reply will go to if provided.
                                         The value must be a topic string (NOT the name of a topic endpoint).
                                         Only works in 'direct' delivery mode.
                                         Defaults to None.
-- timeout (str | None, optional): http/https request timeout set on the client side. Defaults to 120.
-- throw_exception (bool, optional): Throw exception incase request error code indicates an error or timeout has been reached.
+ - timeout (str | None, optional): http/https request timeout set on the client side. Defaults to 120.
+ - throw_exception (bool, optional): Throw exception incase request error code indicates an error or timeout has been reached.
                                     Defaults to False.
 
 Raises:
-- ValueError: Can only select either 'reply_to_queue' or 'reply_for_topic', not both.
-- HTTPError: Return code for request indicates an error
+ - ValueError: Can only select either 'reply_to_queue' or 'reply_for_topic', not both.
+ - HTTPError: Return code for request indicates an error
 
 Returns:
-- dict: Dictionary containing request information and {'timeout':False}.
+ - dict: Dictionary containing request information and {'timeout':False}.
         Incase timeout is reached, returned dictionary only contains {'timeout':True}.
 
 Example: 
@@ -154,27 +154,27 @@ Publish a message to a queue endpoint in persistent mode.
 or for sending a message and getting reply from a consumer to confirm for sure the message was not just spooled but also received.
 
 Args:
-- queue_name (str): Name of the queue endpoint you wish to publish to.
-- message (str): The message you wish to send.
-- request_reply (bool): If false, tells the broker to just conform if the message was spooled into a queue.
+ - queue_name (str): Name of the queue endpoint you wish to publish to.
+ - message (str): The message you wish to send.
+ - request_reply (bool): If false, tells the broker to just conform if the message was spooled into a queue.
                         if true, tells the broker to wait for a reply from the consumer and return that to confirm message delivery.
-- time_to_live (int | None, optional): Lifetime for a guaranteed message (in milliseconds). 
+ - time_to_live (int | None, optional): Lifetime for a guaranteed message (in milliseconds). 
                                         If the message is not delivered by this time limit,
                                         it is either discarded from the queue or moved to dead message queue if eligible.
                                         Only works in 'persistent' delivery mode.
                                         Defaults to None.
-- DMQ_eligible (bool, optional): Set the message as eligible for a Dead Message Queues (DMQ). 
+ - DMQ_eligible (bool, optional): Set the message as eligible for a Dead Message Queues (DMQ). 
                                 Only works in 'persistent' delivery mode.
                                 Defaults to False.
-- timeout (str | None, optional): http/https request timeout set on the client side. Defaults to 120.
-- throw_exception (bool, optional): Throw exception incase request error code indicates an error or timeout has been reached.
+ - timeout (str | None, optional): http/https request timeout set on the client side. Defaults to 120.
+ - throw_exception (bool, optional): Throw exception incase request error code indicates an error or timeout has been reached.
                                     Defaults to False.
 
 Raises:
-- HTTPError: Return code for request indicates an error
+ - HTTPError: Return code for request indicates an error
 
 Returns:
-- dict: Dictionary containing request information and {'timeout':False}.
+ - dict: Dictionary containing request information and {'timeout':False}.
         Incase timeout is reached, returned dictionary only contains {'timeout':True}.
 
 Example:
@@ -206,28 +206,28 @@ Note:
     This library does not support subscribing to a topic endpoint.
 
 Args:
-- topic_string (str): A string used by an endpoint to attract published messages. 
+ - topic_string (str): A string used by an endpoint to attract published messages. 
                     It can contain wildcards to match with multiple sub topic-strings.
-- message (str): The message you wish to send.
-- request_reply (bool): If false, tells the broker to just conform if the message was spooled into a queue.
+ - message (str): The message you wish to send.
+ - request_reply (bool): If false, tells the broker to just conform if the message was spooled into a queue.
                         if true, tells the broker to wait for a reply from the consumer and return that to confirm message delivery.
-- time_to_live (int | None, optional): Lifetime for a guaranteed message (in milliseconds). 
+ - time_to_live (int | None, optional): Lifetime for a guaranteed message (in milliseconds). 
                                         If the message is not delivered by this time limit,
                                         it is either discarded from the queue or moved to dead message queue if eligible.
                                         Only works in 'persistent' delivery mode.
                                         Defaults to None.
-- DMQ_eligible (bool, optional): Set the message as eligible for a Dead Message Queues (DMQ). 
+ - DMQ_eligible (bool, optional): Set the message as eligible for a Dead Message Queues (DMQ). 
                                 Only works in 'persistent' delivery mode.
                                 Defaults to False.
-- timeout (str | None, optional): http/https request timeout set on the client side. Defaults to 120.
-- throw_exception (bool, optional): Throw exception incase request error code indicates an error or timeout has been reached.
+ - timeout (str | None, optional): http/https request timeout set on the client side. Defaults to 120.
+ - throw_exception (bool, optional): Throw exception incase request error code indicates an error or timeout has been reached.
                                     Defaults to False.
 
 Raises:
-- HTTPError: Return code for request indicates an error
+ - HTTPError: Return code for request indicates an error
 
 Returns:
-- dict: Dictionary containing request information and {'timeout':False}.
+ - dict: Dictionary containing request information and {'timeout':False}.
         Incase timeout is reached, returned dictionary only contains {'timeout':True}.
 
 Example:
@@ -247,29 +247,29 @@ Publish a message to a queue endpoint in direct mode asynchronously.
 'direct' mode is for sending messages without expecting a reply.
 
 Args:
-- queue_name (str): Name of the queue endpoint you wish to publish to.
-- message (str): The message you wish to send.
-- reply_to_queue (str | None, optional): After the message is received by the consumer, 
+ - queue_name (str): Name of the queue endpoint you wish to publish to.
+ - message (str): The message you wish to send.
+ - reply_to_queue (str | None, optional): After the message is received by the consumer, 
                                         chose which queue the consumer reply will go to if provided.
                                         The value must be the name of a queue.
                                         Only works in 'direct' delivery mode.
                                         Defaults to None.
-- reply_for_topic (str | None, optional): After the message is received by the consumer, 
+ - reply_for_topic (str | None, optional): After the message is received by the consumer, 
                                         chose which topic string the consumer reply will go to if provided.
                                         The value must be a topic string (NOT the name of a topic endpoint).
                                         Only works in 'direct' delivery mode.
                                         Defaults to None.
-- timeout (str | None, optional): http/https request timeout set on the client side. Defaults to 120.
-- throw_exception (bool, optional): Throw exception incase request error code indicates an error or timeout has been reached.
+ - timeout (str | None, optional): http/https request timeout set on the client side. Defaults to 120.
+ - throw_exception (bool, optional): Throw exception incase request error code indicates an error or timeout has been reached.
                                     Defaults to False.
-- client_params (dict, optional): Use custom http client params instead of using the ones 
+ - client_params (dict, optional): Use custom http client params instead of using the ones 
 
 Raises:
-- ValueError: Can only select either 'reply_to_queue' or 'reply_for_topic', not both.
-- HTTPError: Return code for request indicates an error
+ - ValueError: Can only select either 'reply_to_queue' or 'reply_for_topic', not both.
+ - HTTPError: Return code for request indicates an error
 
 Returns:
-- dict: Dictionary containing request information and {'timeout':False}.
+ - dict: Dictionary containing request information and {'timeout':False}.
         Incase timeout is reached, returned dictionary only contains {'timeout':True}.
 
 Example: 
@@ -299,29 +299,29 @@ Note:
     This library does not support subscribing to a topic endpoint.
 
 Args:
-- topic_string (str): A string used by an endpoint to attract published messages. 
+ - topic_string (str): A string used by an endpoint to attract published messages. 
                     It can contain wildcards to match with multiple sub topic-strings.
-- message (str): The message you wish to send.
-- reply_to_queue (str | None, optional): After the message is received by the consumer, 
+ - message (str): The message you wish to send.
+ - reply_to_queue (str | None, optional): After the message is received by the consumer, 
                                         chose which queue the consumer reply will go to if provided.
                                         The value must be the name of a queue.
                                         Only works in 'direct' delivery mode.
                                         Defaults to None.
-- reply_for_topic (str | None, optional): After the message is received by the consumer, 
+ - reply_for_topic (str | None, optional): After the message is received by the consumer, 
                                         chose which topic string the consumer reply will go to if provided.
                                         The value must be a topic string (NOT the name of a topic endpoint).
                                         Only works in 'direct' delivery mode.
                                         Defaults to None.
-- timeout (str | None, optional): http/https request timeout set on the client side. Defaults to 120.
-- throw_exception (bool, optional): Throw exception incase request error code indicates an error or timeout has been reached.
+ - timeout (str | None, optional): http/https request timeout set on the client side. Defaults to 120.
+ - throw_exception (bool, optional): Throw exception incase request error code indicates an error or timeout has been reached.
                                     Defaults to False.
 
 Raises:
-- ValueError: Can only select either 'reply_to_queue' or 'reply_for_topic', not both.
-- HTTPError: Return code for request indicates an error
+ - ValueError: Can only select either 'reply_to_queue' or 'reply_for_topic', not both.
+ - HTTPError: Return code for request indicates an error
 
 Returns:
-- dict: Dictionary containing request information and {'timeout':False}.
+ - dict: Dictionary containing request information and {'timeout':False}.
         Incase timeout is reached, returned dictionary only contains {'timeout':True}.
 
 Example: 
@@ -341,27 +341,27 @@ Publish a message to a queue endpoint in persistent mode asynchronously.
 or for sending a message and getting reply from a consumer to confirm for sure the message was not just spooled but also received.
 
 Args:
-- queue_name (str): Name of the queue endpoint you wish to publish to.
-- message (str): The message you wish to send.
-- request_reply (bool): If false, tells the broker to just conform if the message was spooled into a queue.
+ - queue_name (str): Name of the queue endpoint you wish to publish to.
+ - message (str): The message you wish to send.
+ - request_reply (bool): If false, tells the broker to just conform if the message was spooled into a queue.
                         if true, tells the broker to wait for a reply from the consumer and return that to confirm message delivery.
-- time_to_live (int | None, optional): Lifetime for a guaranteed message (in milliseconds). 
+ - time_to_live (int | None, optional): Lifetime for a guaranteed message (in milliseconds). 
                                         If the message is not delivered by this time limit,
                                         it is either discarded from the queue or moved to dead message queue if eligible.
                                         Only works in 'persistent' delivery mode.
                                         Defaults to None.
-- DMQ_eligible (bool, optional): Set the message as eligible for a Dead Message Queues (DMQ). 
+ - DMQ_eligible (bool, optional): Set the message as eligible for a Dead Message Queues (DMQ). 
                                 Only works in 'persistent' delivery mode.
                                 Defaults to False.
-- timeout (str | None, optional): http/https request timeout set on the client side. Defaults to 120.
-- throw_exception (bool, optional): Throw exception incase request error code indicates an error or timeout has been reached.
+ - timeout (str | None, optional): http/https request timeout set on the client side. Defaults to 120.
+ - throw_exception (bool, optional): Throw exception incase request error code indicates an error or timeout has been reached.
                                     Defaults to False.
 
 Raises:
-- HTTPError: Return code for request indicates an error
+ - HTTPError: Return code for request indicates an error
 
 Returns:
-- dict: Dictionary containing request information and {'timeout':False}.
+ - dict: Dictionary containing request information and {'timeout':False}.
         Incase timeout is reached, returned dictionary only contains {'timeout':True}.
 
 Example:
@@ -394,28 +394,28 @@ Note:
     This library does not support subscribing to a topic endpoint.
 
 Args:
-- topic_string (str): A string used by an endpoint to attract published messages. 
+ - topic_string (str): A string used by an endpoint to attract published messages. 
                     It can contain wildcards to match with multiple sub topic-strings.
-- message (str): The message you wish to send.
-- request_reply (bool): If false, tells the broker to just conform if the message was spooled into a queue.
+ - message (str): The message you wish to send.
+ - request_reply (bool): If false, tells the broker to just conform if the message was spooled into a queue.
                         if true, tells the broker to wait for a reply from the consumer and return that to confirm message delivery.
-- time_to_live (int | None, optional): Lifetime for a guaranteed message (in milliseconds). 
+ - time_to_live (int | None, optional): Lifetime for a guaranteed message (in milliseconds). 
                                         If the message is not delivered by this time limit,
                                         it is either discarded from the queue or moved to dead message queue if eligible.
                                         Only works in 'persistent' delivery mode.
                                         Defaults to None.
-- DMQ_eligible (bool, optional): Set the message as eligible for a Dead Message Queues (DMQ). 
+ - DMQ_eligible (bool, optional): Set the message as eligible for a Dead Message Queues (DMQ). 
                                 Only works in 'persistent' delivery mode.
                                 Defaults to False.
-- timeout (str | None, optional): http/https request timeout set on the client side. Defaults to 120.
-- throw_exception (bool, optional): Throw exception incase request error code indicates an error or timeout has been reached.
+ - timeout (str | None, optional): http/https request timeout set on the client side. Defaults to 120.
+ - throw_exception (bool, optional): Throw exception incase request error code indicates an error or timeout has been reached.
                                     Defaults to False.
 
 Raises:
-- HTTPError: Return code for request indicates an error
+ - HTTPError: Return code for request indicates an error
 
 Returns:
-- dict: Dictionary containing request information and {'timeout':False}.
+ - dict: Dictionary containing request information and {'timeout':False}.
         Incase timeout is reached, returned dictionary only contains {'timeout':True}.
 
 Example:
@@ -435,12 +435,12 @@ Example:
 Send multiple messages in a batch.
 
 Args:
-- data (list | str): Either a list of dictionaries containing message data, 
+ - data (list | str): Either a list of dictionaries containing message data, 
             or a string containing path to a json file with the data.
             async_mode (bool, optional): To send the message asynchronously or not. Defaults to True.
 
 Returns:
-- list: Output values.
+ - list: Output values.
 
 Example:
 
