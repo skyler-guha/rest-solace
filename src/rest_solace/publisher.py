@@ -618,9 +618,7 @@ class MessagingPublisher():
             list: Output values.
         """
         
-        warnings.warn('This function is experimental.\
-                      It does no validation nor is designed to properly handel errors. \
-                      Its features can be changed in the future.')
+        warnings.warn('This function is experimental. It does no validation nor is designed to properly handel errors. Its features can be changed in the future.')
         
         if isinstance(data, str):
 

@@ -567,19 +567,51 @@ class Manager():
     def auto_rest_messaging_setup_utility(self, msgVpnName:str, queueName:str, subscriptionTopic:str|None, 
                                           restDeliveryPointName:str, restConsumerName:str,
                                           remoteHost:str, remotePort:int, postRequestTarget='/',
-                                          clientProfileName= "default", clientUsername= "default")->None:
+                                          clientProfileName= "default", clientUsername= "default",
+                                          attempt_revert_if_error= True)->None:
         """
-        A single utility function that automatically sets up a queue for you that is ready to communicate with your consumer out of the box!!
+        A single utility function that automatically sets up a queue for you on your vpn of choice that is 
+        ready to communicate with your consumer out of the box!!
         Makes it so that you can start sending messages after running just this one function.
         
         Note: 
             * Requires a message VPN set to messaging mode.
             * All brokers come with a default messaging VPN named "default". 
             * The default VPN is already set to messaging mode.
-            * Before running this function, it is advised to bring up your consumer in the background.
+            * This function will update the UserProfile connected to the given user (which is usually the "default profile") to 
+              allow guaranteed message sending and receive. IF you don't want that, update the user's profile beforehand.
     
         It performs the following steps:
-            0) Updates VPN parameters to allow sending and receiving persistent messages.
+
+        
+record user settings
+
+enable user on the vpn (exit if this fails)
+
+get user's profile
+
+record the profile's settings
+
+update the profile to send and receive guaranteed messages (if it fails, revert user settings)
+
+check if given queue exists
+create a new queue (if it fails, revert last settings)
+
+subscribe to a topic on the queue
+
+create RDP (if fails, delete the queue)
+
+register consumer (if fails, delete queue and rdp)
+
+register queue binding (if fails, delete queue and rdp)
+
+
+
+
+
+
+            1) Enable the user with the given user name on the given VPN (if not already enabled)
+            1) Updates user parameters to allow sending and receiving persistent messages.
             1) Create a new queue with input output enabled and permission to be used by consumers.\n
             2) Have the queue subscribe to a new topic (optional).\n
             3) Create a new rest delivery endpoint to manage rest message delivery.\n
@@ -598,17 +630,19 @@ class Manager():
             postRequestTarget (str): The rest endpoint on the consumer side that will be targeted when sending the message.
             clientProfileName (str, optional): Client Profiles are used to assign common configuration properties to clients that have been successfully authorized. Defaults to 'default'.
             clientUsername (str, optional): A client is only authorized to connect to a Message VPN that is associated with a Client Username that the client has been assigned.
+            attempt_revert_if_error (bool, optional): Tries to the operations performed if one of them fails. 
+                                                      Won't work if the errors were because your connection to your broker is lost.  
         """
 
-        message = "This function is in development phase and will be fully working in rest-solace version 0.3."+ \
-        " The current version of this function will be incompatible with the one in the future release."+ \
-        "The clientProfileName parameter will likely be removed and will be taken from the client details from solace."
-        warnings.warn(message= message,
-                      category= FutureWarning)
 
         #step0
+        self.update_client_username(msgVpnName= msgVpnName, 
+                                    clientUsername= clientUsername,
+                                    enabled= True)
+
+        #step0 (get current client profile settings )
         self.update_client_profile(msgVpnName= msgVpnName, clientProfileName= clientProfileName)
-        self.update_client_username(msgVpnName= msgVpnName, clientUsername= clientUsername)
+        
 
         #step1
         self.create_queue_endpoint(queueName=queueName, msgVpnName=msgVpnName, throw_exception= False)
