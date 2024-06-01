@@ -1,5 +1,7 @@
 from .http_client import HttpClient
 from urllib.parse import urlsplit, urlunsplit
+import warnings
+from warnings import *
 
 class Manager():
     
@@ -597,6 +599,12 @@ class Manager():
             clientProfileName (str, optional): Client Profiles are used to assign common configuration properties to clients that have been successfully authorized. Defaults to 'default'.
             clientUsername (str, optional): A client is only authorized to connect to a Message VPN that is associated with a Client Username that the client has been assigned.
         """
+
+        message = "This function is in development phase and will be fully working in rest-solace version 0.3."+ \
+        " The current version of this function will be incompatible with the one in the future release."+ \
+        "The clientProfileName parameter will likely be removed and will be taken from the client details from solace."
+        warnings.warn(message= message,
+                      category= FutureWarning)
 
         #step0
         self.update_client_profile(msgVpnName= msgVpnName, clientProfileName= clientProfileName)
