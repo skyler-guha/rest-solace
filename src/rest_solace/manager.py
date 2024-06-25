@@ -4,6 +4,8 @@ import warnings
 from warnings import *
 
 class Manager():
+
+    config_base_path = "/SEMP/v2/config"
     
     def __init__(self, user_name:str, password:str,
                  host:str, semp_port:str= "8080", verify_ssl=False) -> None:
@@ -23,7 +25,7 @@ class Manager():
                                       verify_ssl= verify_ssl)
 
 
-    #info
+    #=====about functions===== (Finished)
     
     def get_about_api(self, throw_exception= True)->dict:
         """This provides metadata about the SEMP API, such as the version of the API supported by the broker.
@@ -36,7 +38,62 @@ class Manager():
             dict: Requested data.
         """
 
-        endpoint = "/SEMP/v2/config/about/api"
+        endpoint = self.config_base_path+"/about/api"
+
+        res = self.http_client.http_get(endpoint= endpoint)
+
+        if throw_exception:
+            res.raise_for_status()
+        return res.json()
+
+    def get_current_user_info(self, throw_exception= True)->dict:
+        """Get Session and access level information about the user accessing the SEMP API.
+
+        Args:
+            throw_exception (bool, optional): Throw exception incase request error code indicates an error. 
+                                              Defaults to True.
+
+        Returns:
+            dict: Requested data.
+        """
+        endpoint = self.config_base_path+"/about/user/msgVpns"
+
+        res = self.http_client.http_get(endpoint= endpoint)
+
+        if throw_exception:
+            res.raise_for_status()
+        return res.json()
+    
+    def get_message_vpn_access_list(self, throw_exception= True)->dict:
+        """Get a list of all the VPNs the username used to access the SEMP API has access to.
+
+        Args:
+            throw_exception (bool, optional): Throw exception incase request error code indicates an error. 
+                                              Defaults to True.
+
+        Returns:
+            dict: Requested data.
+        """
+        endpoint = self.config_base_path+"/about/user/msgVpns"
+
+        res = self.http_client.http_get(endpoint= endpoint)
+
+        if throw_exception:
+            res.raise_for_status()
+        return res.json()
+    
+    def get_vpn_access_info(self, msgVpnName, throw_exception= True)->dict:
+        """This provides information about the Message VPN access level for the provided VPN, for the username used to access the SEMP API.
+
+        Args:
+            msgVpnName (str): Name of the message vpn you want to know about.
+            throw_exception (bool, optional): Throw exception incase request error code indicates an error. 
+                                              Defaults to True.
+
+        Returns:
+            dict: Requested data.
+        """
+        endpoint = self.config_base_path+f"/about/user/msgVpns/{msgVpnName}"
 
         res = self.http_client.http_get(endpoint= endpoint)
 
@@ -51,7 +108,7 @@ class Manager():
     def fetch_all_client_profiles(self, msgVpnName= "default", select= "*"):
 
 
-        endpoint = f"/SEMP/v2/config/msgVpns/{msgVpnName}/clientProfiles?count=1&select={select}"
+        endpoint = self.config_base_path+f"/msgVpns/{msgVpnName}/clientProfiles?count=1&select={select}"
 
         data= list()
         links= list()
@@ -101,7 +158,7 @@ class Manager():
 
         #To change setting manually: 
         #select vpn, access_control tab -> user profiles tab -> <profile name> -> allow client to <setting>
-        endpoint = f"/SEMP/v2/config/msgVpns/{msgVpnName}/clientProfiles/{clientProfileName}"
+        endpoint = self.config_base_path+f"/msgVpns/{msgVpnName}/clientProfiles/{clientProfileName}"
         
         body = {"msgVpnName": msgVpnName,
                 "clientProfileName": clientProfileName,
@@ -127,7 +184,7 @@ class Manager():
 
         #To change setting manually: 
         #select vpn, access_control tab -> clint usernames tab -> <client user name> -> enable
-        endpoint = f"/SEMP/v2/config/msgVpns/{msgVpnName}/clientUsernames/{clientUsername}"
+        endpoint = self.config_base_path+f"/msgVpns/{msgVpnName}/clientUsernames/{clientUsername}"
         
         body = {'enabled': enabled}
 
@@ -175,7 +232,7 @@ class Manager():
             dict: Requested data.
         """
 
-        endpoint = f"/SEMP/v2/config/msgVpns?count={str(count)}&select={select}"
+        endpoint = self.config_base_path+f"/msgVpns?count={str(count)}&select={select}"
 
         if where != None:
             endpoint+="&where={where}"
@@ -199,7 +256,7 @@ class Manager():
             dict: list of pages
         """
 
-        endpoint = f"/SEMP/v2/config/msgVpns?count=100&select={select}"
+        endpoint = self.config_base_path+f"/msgVpns?count=100&select={select}"
 
         data= list()
         links= list()
@@ -277,7 +334,7 @@ class Manager():
             _type_: _description_
         """
 
-        endpoint = f"/SEMP/v2/config/msgVpns"
+        endpoint = self.config_base_path+f"/msgVpns"
 
         body = {"msgVpnName": msgVpnName,
                 "enabled": enabled,
@@ -298,7 +355,7 @@ class Manager():
         return res.json()
 
     def delete_message_vpn(self, msgVpnName:str, throw_exception= True)->dict:
-        endpoint = f"/SEMP/v2/config/msgVpns/{msgVpnName}"
+        endpoint = self.config_base_path+f"/msgVpns/{msgVpnName}"
 
         res = self.http_client.http_delete(endpoint= endpoint)
 
@@ -334,7 +391,7 @@ class Manager():
             dict: HTTP response converted to json format.
         """
         
-        endpoint = f"/SEMP/v2/config/msgVpns/{msgVpnName}/topicEndpoints"
+        endpoint = self.config_base_path+f"/msgVpns/{msgVpnName}/topicEndpoints"
 
         body = {"msgVpnName": msgVpnName,
                 "topicEndpointName": topicEndpointName}
@@ -374,7 +431,7 @@ class Manager():
             dict: HTTP response converted to json format.
         """
         
-        endpoint = f"/SEMP/v2/config/msgVpns/{msgVpnName}/queues"
+        endpoint = self.config_base_path+f"/msgVpns/{msgVpnName}/queues"
 
         body = {"msgVpnName": msgVpnName,
                 "queueName": queueName,
@@ -393,7 +450,7 @@ class Manager():
         return res.json()
     
     def delete_queue_endpoint(self, queueName:str, msgVpnName:str= "default", throw_exception:bool= True)->dict:
-        endpoint = f"/SEMP/v2/config/msgVpns/{msgVpnName}/queues/{queueName}"
+        endpoint = self.config_base_path+f"/msgVpns/{msgVpnName}/queues/{queueName}"
 
         res = self.http_client.http_delete(endpoint= endpoint)
 
@@ -416,7 +473,7 @@ class Manager():
             dict: HTTP response converted to json format.
         """
         
-        endpoint = f"/SEMP/v2/config/msgVpns/{msgVpnName}/queues/{queueName}/subscriptions"
+        endpoint = self.config_base_path+f"/msgVpns/{msgVpnName}/queues/{queueName}/subscriptions"
 
         body = {"subscriptionTopic": subscriptionTopic,
                 "queueName": queueName,
@@ -449,7 +506,7 @@ class Manager():
             dict: HTTP response converted to json format.
         """
         
-        endpoint = f"/SEMP/v2/config/msgVpns/{msgVpnName}/restDeliveryPoints"
+        endpoint = self.config_base_path+f"/msgVpns/{msgVpnName}/restDeliveryPoints"
 
         body = {"restDeliveryPointName": restDeliveryPointName,
                 "msgVpnName": msgVpnName,
@@ -467,7 +524,7 @@ class Manager():
     
     def delete_rest_delivery_point(self, restDeliveryPointName:str, msgVpnName:str= "default", throw_exception:bool= True) -> dict:
             
-        endpoint = f"/SEMP/v2/config/msgVpns/{msgVpnName}/restDeliveryPoints/{restDeliveryPointName}"
+        endpoint = self.config_base_path+f"/msgVpns/{msgVpnName}/restDeliveryPoints/{restDeliveryPointName}"
 
         res = self.http_client.http_delete(endpoint= endpoint)
 
@@ -496,7 +553,7 @@ class Manager():
             dict: HTTP response converted to json format.
         """
         
-        endpoint = f"/SEMP/v2/config/msgVpns/{msgVpnName}/restDeliveryPoints/{restDeliveryPointName}/restConsumers"
+        endpoint = self.config_base_path+f"/msgVpns/{msgVpnName}/restDeliveryPoints/{restDeliveryPointName}/restConsumers"
 
         body = {"restDeliveryPointName": restDeliveryPointName,
                 "msgVpnName": msgVpnName,
@@ -535,7 +592,7 @@ class Manager():
             dict: HTTP response converted to json format.
         """
         
-        endpoint = f"/SEMP/v2/config/msgVpns/{msgVpnName}/restDeliveryPoints/{restDeliveryPointName}/queueBindings"
+        endpoint = self.config_base_path+f"/msgVpns/{msgVpnName}/restDeliveryPoints/{restDeliveryPointName}/queueBindings"
 
         body = {"restDeliveryPointName": restDeliveryPointName,
                 "queueBindingName": queueBindingName,
@@ -553,7 +610,7 @@ class Manager():
 
     def restart_rest_delivery_point(self, restDeliveryPointName:str, msgVpnName:str= "default"):
 
-        endpoint = f"/SEMP/v2/config/msgVpns/{msgVpnName}/restDeliveryPoints/{restDeliveryPointName}"
+        endpoint = self.config_base_path+f"/msgVpns/{msgVpnName}/restDeliveryPoints/{restDeliveryPointName}"
 
         #disable rdp
         self.http_client.http_patch(endpoint= endpoint, payload= {'enabled': False})
@@ -583,27 +640,26 @@ class Manager():
     
         It performs the following steps:
 
-        
-record user settings
+            record user settings
 
-enable user on the vpn (exit if this fails)
+            enable user on the vpn (exit if this fails)
 
-get user's profile
+            get user's profile
 
-record the profile's settings
+            record the profile's settings
 
-update the profile to send and receive guaranteed messages (if it fails, revert user settings)
+            update the profile to send and receive guaranteed messages (if it fails, revert user settings)
 
-check if given queue exists
-create a new queue (if it fails, revert last settings)
+            check if given queue exists
+            create a new queue (if it fails, revert last settings)
 
-subscribe to a topic on the queue
+            subscribe to a topic on the queue
 
-create RDP (if fails, delete the queue)
+            create RDP (if fails, delete the queue)
 
-register consumer (if fails, delete queue and rdp)
+            register consumer (if fails, delete queue and rdp)
 
-register queue binding (if fails, delete queue and rdp)
+            register queue binding (if fails, delete queue and rdp)
 
 
 
