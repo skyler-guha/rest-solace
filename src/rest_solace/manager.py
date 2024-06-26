@@ -152,17 +152,29 @@ class Manager():
             res.raise_for_status()
         return res.json()
 
-    def fetch_all_vpn_objects(self, select= "*")->dict[list, list]:
+    def fetch_all_vpn_objects(self, where= None, 
+                              select= '*', opaquePassword= None)->dict[list, list]:
         """Uses pagination to fetch and compile a list of all vpn objects.
 
         Args:
             select (str, optional): selection query. Defaults to "*".
+            where (str): Specify that a response should include only objects that satisfy certain conditions.
+                         Expects comma-separated list of expressions. 
+                         All expressions must be true for the object to be included in the response.
+                         For more info, consult: https://docs.solace.com/Admin/SEMP/SEMP-Features.htm#Filtering
+            opaquePassword (str): Password to retrieve attributes with the opaque property. 
 
         Returns:
             dict: list of pages
         """
 
         endpoint = self.config_base_path+f"/msgVpns?count=100&select={select}"
+
+        if where != None:
+            endpoint+="&where={where}"
+
+        if opaquePassword != None:
+            endpoint+="&opaquePassword={opaquePassword}"
 
         data= list()
         links= list()
@@ -381,11 +393,10 @@ class Manager():
             res.raise_for_status()
         return res.json()
 
+
     #client profile
 
-    
     def fetch_all_client_profiles(self, msgVpnName= "default", select= "*"):
-
 
         endpoint = self.config_base_path+f"/msgVpns/{msgVpnName}/clientProfiles?count=1&select={select}"
 
