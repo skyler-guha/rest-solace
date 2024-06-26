@@ -4,6 +4,7 @@ from consumer_test import return_uppercase
 import threading
 import time
 import asyncio
+import pprint
 import logging
 logging.basicConfig(level=logging.WARNING)
 
@@ -171,7 +172,8 @@ def test_send_messages():
 
     try:
         res = publish.send_messages(data= "test_data.json")
-        print("\nResponse:\n",res)
+        print("\nResponse:\n")
+        pprint.pprint(res)
     except Exception as e:
         print(e)
 
@@ -199,14 +201,10 @@ def test_send_messages():
 # time.sleep(15)
 # asyncio.run(test_async_persistent_message_for_topic())
 
+#testing sending multiple messages
+time.sleep(15)
 test_send_messages()
 
-#co = publish.async_direct_message_to_queue(queue_name= "my_queue", message= "hello world!!")
-
-
-#coroutine_obj=  asyncio.run(publish.async_direct_message_to_queue(queue_name= "my_queue", message= "hello world!!"))
-
-#print(coroutine_obj)
 
 
 
