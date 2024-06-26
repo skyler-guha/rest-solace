@@ -65,7 +65,7 @@ class HttpClient:
         
 
     def http_patch(self, endpoint:str, payload, headers:dict= {'Content-Type': 'application/json'}, timeout=None):
-        """method to update the http endpoint
+        """method to update at the http endpoint
         Args:
             endpoint: endpoint string
             payload: request payload
@@ -83,6 +83,26 @@ class HttpClient:
                               verify= self.verify_ssl, 
                               timeout= timeout)
 
+
+    def http_put(self, endpoint:str, payload, headers:dict= {'Content-Type': 'application/json'}, timeout=None):
+        """method to replace at the http endpoint
+        Args:
+            endpoint: endpoint string
+            payload: request payload
+
+        Raises:
+            HTTP PUT request failed. with response status code or
+            HTTP error occurred while HTTP PUT exception
+        """
+        url = f"{self.base_url}{endpoint}"
+        
+        return requests.put(url= url, 
+                            auth= self.authHeader, 
+                            ata= json.dumps(payload),
+                            headers= headers, 
+                            verify= self.verify_ssl, 
+                            timeout= timeout)
+    
 
     def http_delete(self, endpoint:str, headers:dict= {'Content-Type': 'application/json'}):
         """method for http delete
