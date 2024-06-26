@@ -61,5 +61,25 @@ You may learn more about this topic here:
 https://solace.com/blog/delivery-modes-direct-messaging-vs-persistent-messaging/
 
 
+SEMP2 and Accessing Data "Objects"
+====================================
+
+Solace Element Management Protocol version 2 (SEMP v2) is a RESTful API that 
+provides a programmable way to configure PubSub+ event brokers. 
+
+It is what is used by this library's management class for doing management stuff.
+
+An important thing to note is that under SEMP2 information about the brokers configurations 
+is stored in a Object Oriented way. For example all the message VPNs are accessed in SEMP2 as if you
+are getting a list of "Objects" which contain a multiple attributes such as VPNn name, their settings, etc.
+These objects in turn can be converted to python dictionaries since the objects contain only 
+attributes and no methods (so the name of the attribute becomes key name, and its value becomes the key's value).
+
+This library tries to hide that object oriented abstraction in favor of functions that simply give you a specific type of data 
+like list of VPNs, list of queues, etc. However sometimes in the documentation it might get mentioned as list 
+of VPN objects, list of queue objects etc. All it implies is that the function gives you list of individual 
+entities of a certain type (like VPNs or queues) and it is good to be mindful of that. It DOES NOT mean 
+the library will give you an actual python class object.
+
 
 
