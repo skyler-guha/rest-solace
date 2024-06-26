@@ -24,7 +24,7 @@ Note:
 -----------------------------
 Getting started with Solace:
 -----------------------------
-You can find the docs for this library `here <https://github.com/skyler-guha/rest-solace/blob/master/docs/index.rst>`_ .
+You can find the docs for this library `on this page <https://github.com/skyler-guha/rest-solace/blob/master/docs/index.rst>`_ .
 
 If you are new to solace and confused about the terminology and workflows around it, it is **highly** recommended 
 that you read `this <https://github.com/skyler-guha/rest-solace/blob/master/docs/getting_started_with_solace.rst/>`_ document first.
