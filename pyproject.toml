@@ -40,7 +40,7 @@ dependencies = [
     #"logging"          #part of the standard library
     #"warnings"         #part of the standard library
 ]
-version = "0.2.4"
+version = "0.2.5"
 
 [project.urls]
 pypi = "https://pypi.org/project/rest-solace/"
