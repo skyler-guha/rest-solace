@@ -30,16 +30,16 @@ Semp Config
      - Used in function `get_about_api()`
    * - "/about/user"
      - GET
-     - Pending
-     - 
+     - True
+     - Get Session and access level information about the user accessing the SEMP API. Used in function `get_current_user_info()`.
    * - "/about/user/msgVpns"
      - GET
-     - Pending
-     -  
+     - True
+     - Get a list of all the VPNs the username used to access the SEMP API has access to. Used in function `get_message_vpn_access_list()`.
    * - "/about/user/msgVpns/{msgVpnName}"
      - GET
-     - Pending
-     -  
+     - True
+     - This provides information about the Message VPN access level for the provided VPN, for the username used to access the SEMP API.  Used in function `get_vpn_access_info()`. 
 
 
 .. list-table:: Category: clientCertAuthority
@@ -95,7 +95,7 @@ Semp Config
 
 > domainCertAuthority (Table Pending)
 
-.. list-table:: Category: clientCertAuthority (Table unfinished)
+.. list-table:: Category: msgVpn (Table unfinished)
    :widths: 30 5 5 15
    :header-rows: 1
 
@@ -106,27 +106,27 @@ Semp Config
    * - "/msgVpns"
      - GET
      - True
-     - 
+     - Get list of message VPNs and info regarding them based on specified parameters. Used in function `fetch_all_vpn_objects()` and `request_vpn_objects()`.
    * - "/msgVpns"
      - POST
      - True
-     - 
+     - Create a new VPN on the broker. Used in function `create_message_vpn()`.
    * - "/msgVpns/{msgVpnName}"
      - DELETE
      - True
-     - 
+     - Delete the specified message VPN. Used in function `delete_message_vpn()`.
    * - "/msgVpns/{msgVpnName}"
      - GET
-     - Pending
-     - 
+     - True
+     - Returns the message VPN object for the requested vpn. Used in function `get_message_vpn_info()`.
    * - "/msgVpns/{msgVpnName}"
      - PATCH
-     - Pending
-     - 
+     - True
+     - Updates the message vpn for the provided attributes. Used in function `update_message_vpn()`.
    * - "/msgVpns/{msgVpnName}"
      - PUT
      - True
-     - 
+     - Replaces the message vpn object with the one you provide. Used in function `replace_message_vpn()`
 
 .
 .

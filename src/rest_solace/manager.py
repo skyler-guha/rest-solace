@@ -82,7 +82,7 @@ class Manager():
             res.raise_for_status()
         return res.json()
     
-    def get_vpn_access_info(self, msgVpnName, throw_exception= True)->dict:
+    def get_message_vpn_access_info(self, msgVpnName, throw_exception= True)->dict:
         """This provides information about the Message VPN access level for the provided VPN, for the username used to access the SEMP API.
 
         Args:
@@ -101,6 +101,285 @@ class Manager():
             res.raise_for_status()
         return res.json()
 
+
+    #=====VPN functions===== (Pending)
+
+
+
+    #Finished. Now need to give same options to fetch.
+    def request_vpn_objects(self, count:int= 10, where= None, 
+                            select= '*', opaquePassword= None,
+                            throw_exception= True)->dict:
+        """Get list of message VPNs and info regarding them based on specified parameters.
+        
+        Note: 
+            This function directly passes parameters to an endpoint and could require the use of pagination to access all values.
+            It is recommended that you use get_all_vpn_objects() function instead which grantees all info, but uses more bandwidth.
+
+        For more info: 
+            https://docs.solace.com/API-Developer-Online-Ref-Documentation/swagger-ui/software-broker/config/index.html#/msgVpn/getMsgVpns
+
+        Args:
+            count (int): Limits the number of objects in the response. default is 10.
+                         Ideally your applications should always be written to handle pagination instead of massive counts.
+            where (str): Specify that a response should include only objects that satisfy certain conditions.
+                         Expects comma-separated list of expressions. 
+                         All expressions must be true for the object to be included in the response.
+                         For more info, consult: https://docs.solace.com/Admin/SEMP/SEMP-Features.htm#Filtering
+            select (str): Select only certain attributes to return. 
+                          Expects comma-separated list of attribute names.
+                          Give value 'msgVpnName,enabled' to see only names and enabled status.
+                          For more info, consult: https://docs.solace.com/Admin/SEMP/SEMP-Features.htm#Select
+            opaquePassword (str): Password to retrieve attributes with the opaque property. 
+            throw_exception (bool, optional): Throw exception incase request error code indicates an error. 
+                                              Defaults to True.
+
+        Returns:
+            dict: Requested data.
+        """
+
+        endpoint = self.config_base_path+f"/msgVpns?count={str(count)}&select={select}"
+
+        if where != None:
+            endpoint+="&where={where}"
+
+        if opaquePassword != None:
+            endpoint+="&opaquePassword={opaquePassword}"
+
+        res = self.http_client.http_get(endpoint= endpoint)
+        
+        if throw_exception:
+            res.raise_for_status()
+        return res.json()
+
+    def fetch_all_vpn_objects(self, select= "*")->dict[list, list]:
+        """Uses pagination to fetch and compile a list of all vpn objects.
+
+        Args:
+            select (str, optional): selection query. Defaults to "*".
+
+        Returns:
+            dict: list of pages
+        """
+
+        endpoint = self.config_base_path+f"/msgVpns?count=100&select={select}"
+
+        data= list()
+        links= list()
+        
+        res = self.http_client.http_get(endpoint= endpoint)
+        res.raise_for_status()
+        res = res.json()
+
+        data.extend(res["data"])
+        links.extend(res["links"])
+             
+        while True:
+            paging_url= res['meta'].get('paging')
+
+            if paging_url == None:
+                break
+            else:
+                split= urlsplit(paging_url['nextPageUri'])
+                endpoint= urlunsplit(("", "", split.path, split.query, split.fragment))
+
+                res = self.http_client.http_get(endpoint)
+                res.raise_for_status()
+                res = res.json()
+
+                data.extend(res["data"])
+                links.extend(res["links"])
+            
+        return {"data":data, "links":links}
+
+    def list_message_vpns(self)->list:
+        """List all the message VPNs on the broker.
+
+        Returns:
+            list: List of all the message VPNs.
+        """
+
+        data = self.fetch_all_vpn_objects(select="msgVpnName")["data"]
+        names = [name["msgVpnName"] for name in data]
+
+        return names
+
+    def message_vpn_exists(self, msgVpnName:str)->bool:
+        """Returns True if the message VPN specified exists, else False..
+
+        Args:
+            msgVpnName (str): Name of the message VPN.
+
+        Returns:
+            bool: True if vpn exists else False.
+        """
+
+        names= self.list_message_vpns()
+        return True if msgVpnName in names else False
+
+    def create_message_vpn(self, msgVpnName:str, enabled:bool= True, 
+                           maxMsgSpoolUsage:int= 1500,
+                           authenticationBasicEnabled:bool= True, 
+                           authenticationBasicType:str= "none",
+                           serviceRestIncomingPlainTextEnabled:bool= True,
+                           serviceRestIncomingPlainTextListenPort:int= 0,
+                           serviceRestMode:str= "messaging",
+                           throw_exception= True, **kwargs):
+        """Create a new VPN on the broker.
+
+        For more info:
+            https://docs.solace.com/API-Developer-Online-Ref-Documentation/swagger-ui/software-broker/config/index.html#/msgVpn/createMsgVpn
+
+        Args:
+            msgVpnName (str): Name for the new vpn.
+            enabled (bool): enable or disable the vpn.
+            authenticationBasicEnabled (bool): Basic authentication is authentication that involves 
+                                               the use of a username and password to prove identity.
+            authenticationBasicType (str): The type of basic authentication to use for clients connecting to the Message VPN. Can be one of:
+                                            1) "internal" - Internal database. Authentication is against Client Usernames.
+                                            2) "ldap" - LDAP authentication. An LDAP profile name must be provided.
+                                            3) "radius" - RADIUS authentication. A RADIUS profile name must be provided.
+                                            4) "none" - No authentication. Anonymous login allowed.
+
+            serviceRestIncomingPlainTextEnabled (bool): Enable or disable the plain-text REST service for incoming clients in the Message VPN.
+            serviceRestIncomingPlainTextListenPort (int): The port number for incoming plain-text REST clients that connect to the Message VPN. 
+                                                          The port must be unique across the message backbone. 
+                                                          A value of 0 means that the listen-port is unassigned and cannot be enabled.
+            serviceRestMode (str): The REST service mode for incoming REST clients that connect to the Message VPN. The options are:
+                                    1) "messaging" - Act as a message broker on which REST messages are queued.
+                                    2) "gateway" - Act as a message gateway through which REST messages are propagated.
+
+        Returns:
+            _type_: _description_
+        """
+
+        endpoint = self.config_base_path+f"/msgVpns"
+
+        body = {"msgVpnName": msgVpnName,
+                "enabled": enabled,
+                "authenticationBasicEnabled": authenticationBasicEnabled,
+                "authenticationBasicType": authenticationBasicType,
+                "maxMsgSpoolUsage": maxMsgSpoolUsage,
+                "serviceRestIncomingPlainTextEnabled": serviceRestIncomingPlainTextEnabled,
+                "serviceRestIncomingPlainTextListenPort": serviceRestIncomingPlainTextListenPort,
+                "serviceRestMode": serviceRestMode
+                }
+
+        body = body | kwargs
+
+        res = self.http_client.http_post(endpoint= endpoint, payload= body)
+
+        if throw_exception:
+            res.raise_for_status()
+        return res.json()
+
+    def delete_message_vpn(self, msgVpnName:str, throw_exception= True)->dict:
+        """Delete the specified message VPN (Provided there is nothing inside it that would prevent you from deleting it).
+
+        Args:
+            msgVpnName (str): Name of the VPN you wish to delete.
+            throw_exception (bool, optional): throw_exception (bool, optional): Throw exception incase request error code indicates an error. 
+                                              Defaults to True.
+
+        Returns:
+            dict: data on the deleted VPN.
+        """
+        endpoint = self.config_base_path+f"/msgVpns/{msgVpnName}"
+
+        res = self.http_client.http_delete(endpoint= endpoint)
+
+        if throw_exception:
+            res.raise_for_status()
+        return res.json()
+
+    def get_message_vpn_info(self, msgVpnName:str, select:str= "*", 
+                             opaquePassword:str= None, throw_exception:bool= True)->dict:
+        """Returns the message VPN object for the requested vpn.
+
+        Args:
+            msgVpnName (str): Name of the message vpn
+            select (str, optional): Query string to select the specific attributes you wish returned. Defaults to "*".
+            opaquePassword (str): Password to retrieve attributes with the opaque property. 
+            throw_exception (bool, optional): Throw exception incase request error code indicates an error. 
+                                              Defaults to True.
+
+        Returns:
+            dict: requested data.
+        """
+        
+        endpoint = self.config_base_path+f"/msgVpns/{msgVpnName}?select={select}"
+
+        if opaquePassword != None:
+            endpoint+="&opaquePassword={opaquePassword}"
+
+        res = self.http_client.http_get(endpoint= endpoint)
+        
+        if throw_exception:
+            res.raise_for_status()
+        return res.json()
+
+
+    def update_message_vpn(self, msgVpnName:str, update_attributes:dict,
+                           select:str= "*", opaquePassword:str= None, 
+                           throw_exception:bool= True)->dict:
+        """Updates the message vpn for the provided attributes in the 'update_attributes' parameter.
+        Any attribute missing from the request will be left unchanged.
+
+        Args:
+            msgVpnName (str): Name of the message vpn
+            update_attributes (dict): A dict where the keys are the attributes you wish to update and the values are the new values.
+                                      Any attribute missing from the request will be left unchanged.
+            select (str, optional): Query string to select the specific attributes you wish returned in the response. Defaults to "*".
+            opaquePassword (str): Password to retrieve attributes with the opaque property. 
+            throw_exception (bool, optional): Throw exception incase request error code indicates an error. 
+                                              Defaults to True.
+
+        Returns:
+            dict: data of the updated message vpn.
+        """
+        
+        endpoint = self.config_base_path+f"/msgVpns/{msgVpnName}?select={select}"
+
+        if opaquePassword != None:
+            endpoint+="&opaquePassword={opaquePassword}"
+
+        res = self.http_client.http_patch(endpoint= endpoint, payload= update_attributes)
+        
+        if throw_exception:
+            res.raise_for_status()
+        return res.json()
+    
+    def replace_message_vpn(self, msgVpnName:str, replacement_vpn_object:dict,
+                            select:str= "*", opaquePassword:str= None, 
+                            throw_exception:bool= True)->dict:
+        """Replaces the message vpn object with the one you provide.
+        Any attribute missing from the request will be set to its default value, 
+        subject to a few exceptions you may read about here:
+        https://docs.solace.com/API-Developer-Online-Ref-Documentation/swagger-ui/software-broker/config/index.html#/msgVpn/replaceMsgVpn
+
+        Args:
+            msgVpnName (str): Name of the message vpn
+            replacement_vpn_object (dict): A dict where the keys are the attributes you wish to specify for your replacement VPN.
+                                           Any attribute missing from the request will be set to its default value (subject to a few exceptions).
+            select (str, optional): Query string to select the specific attributes you wish returned in the response. Defaults to "*".
+            opaquePassword (str): Password to retrieve attributes with the opaque property. 
+            throw_exception (bool, optional): Throw exception incase request error code indicates an error. 
+                                              Defaults to True.
+
+        Returns:
+            dict: data of the updated message vpn.
+        """
+        
+        endpoint = self.config_base_path+f"/msgVpns/{msgVpnName}?select={select}"
+
+        if opaquePassword != None:
+            endpoint+="&opaquePassword={opaquePassword}"
+
+        res = self.http_client.http_patch(endpoint= endpoint, payload= replacement_vpn_object)
+        
+        if throw_exception:
+            res.raise_for_status()
+        return res.json()
 
     #client profile
 
@@ -198,170 +477,9 @@ class Manager():
 
 
 
-    # VPNs
+    
 
-    #Finished. Now need to give same options to fetch.
-    def request_vpn_objects(self, count:int= 10, where= None, 
-                            select= '*', opaquePassword= None,
-                            throw_exception= True)->dict:
-        """Get list of message VPNs and info regarding them based on specified parameters.
-        
-        Note: 
-            This function directly passes parameters to an endpoint and could require the use of pagination to access all values.
-            It is recommended that you use get_all_vpn_objects() function instead which grantees all info, but uses more bandwidth.
-
-        For more info: 
-            https://docs.solace.com/API-Developer-Online-Ref-Documentation/swagger-ui/software-broker/config/index.html#/msgVpn/getMsgVpns
-
-        Args:
-            count (int): Limits the number of objects in the response. default is 10.
-                         Ideally your applications should always be written to handle pagination instead of massive counts.
-            where (str): Specify that a response should include only objects that satisfy certain conditions.
-                         Expects comma-separated list of expressions. 
-                         All expressions must be true for the object to be included in the response.
-                         For more info, consult: https://docs.solace.com/Admin/SEMP/SEMP-Features.htm#Filtering
-            select (str): Select only certain attributes to return. 
-                          Expects comma-separated list of attribute names.
-                          Give value 'msgVpnName,enabled' to see only names and enabled status.
-                          For more info, consult: https://docs.solace.com/Admin/SEMP/SEMP-Features.htm#Select
-            opaquePassword (str): Password to retrieve attributes with the opaque property. 
-            throw_exception (bool, optional): Throw exception incase request error code indicates an error. 
-                                              Defaults to True.
-
-        Returns:
-            dict: Requested data.
-        """
-
-        endpoint = self.config_base_path+f"/msgVpns?count={str(count)}&select={select}"
-
-        if where != None:
-            endpoint+="&where={where}"
-
-        if opaquePassword != None:
-            endpoint+="&opaquePassword={opaquePassword}"
-
-        res = self.http_client.http_get(endpoint= endpoint)
-        
-        if throw_exception:
-            res.raise_for_status()
-        return res.json()
-
-    def fetch_all_vpn_objects(self, select= "*")->dict[list, list]:
-        """Uses pagination to fetch and compile a list of all vpn objects.
-
-        Args:
-            select (str, optional): selection query. Defaults to "*".
-
-        Returns:
-            dict: list of pages
-        """
-
-        endpoint = self.config_base_path+f"/msgVpns?count=100&select={select}"
-
-        data= list()
-        links= list()
-        
-        res = self.http_client.http_get(endpoint= endpoint)
-        res.raise_for_status()
-        res = res.json()
-
-        data.extend(res["data"])
-        links.extend(res["links"])
-             
-        while True:
-            paging_url= res['meta'].get('paging')
-
-            if paging_url == None:
-                break
-            else:
-                split= urlsplit(paging_url['nextPageUri'])
-                endpoint= urlunsplit(("", "", split.path, split.query, split.fragment))
-
-                res = self.http_client.http_get(endpoint)
-                res.raise_for_status()
-                res = res.json()
-
-                data.extend(res["data"])
-                links.extend(res["links"])
-            
-        return {"data":data, "links":links}
-
-    def list_message_vpns(self)->list:
-
-        data = self.fetch_all_vpn_objects(select="msgVpnName")["data"]
-        names = [name["msgVpnName"] for name in data]
-
-        return names
-
-    def message_vpn_exists(self, msgVpnName)->bool:
-
-        names= self.list_message_vpns()
-        return True if msgVpnName in names else False
-
-    def create_message_vpn(self, msgVpnName:str, enabled:bool= True, 
-                           maxMsgSpoolUsage:int= 1500,
-                           authenticationBasicEnabled:bool= True, 
-                           authenticationBasicType:str= "none",
-                           serviceRestIncomingPlainTextEnabled:bool= True,
-                           serviceRestIncomingPlainTextListenPort:int= 0,
-                           serviceRestMode:str= "messaging",
-                           throw_exception= True, **kwargs):
-        """Create a new VPN on the broker.
-
-        For more info:
-            https://docs.solace.com/API-Developer-Online-Ref-Documentation/swagger-ui/software-broker/config/index.html#/msgVpn/createMsgVpn
-
-        Args:
-            msgVpnName (str): Name for the new vpn.
-            enabled (bool): enable or disable the vpn.
-            authenticationBasicEnabled (bool): Basic authentication is authentication that involves 
-                                               the use of a username and password to prove identity.
-            authenticationBasicType (str): The type of basic authentication to use for clients connecting to the Message VPN. Can be one of:
-                                            1) "internal" - Internal database. Authentication is against Client Usernames.
-                                            2) "ldap" - LDAP authentication. An LDAP profile name must be provided.
-                                            3) "radius" - RADIUS authentication. A RADIUS profile name must be provided.
-                                            4) "none" - No authentication. Anonymous login allowed.
-
-            serviceRestIncomingPlainTextEnabled (bool): Enable or disable the plain-text REST service for incoming clients in the Message VPN.
-            serviceRestIncomingPlainTextListenPort (int): The port number for incoming plain-text REST clients that connect to the Message VPN. 
-                                                          The port must be unique across the message backbone. 
-                                                          A value of 0 means that the listen-port is unassigned and cannot be enabled.
-            serviceRestMode (str): The REST service mode for incoming REST clients that connect to the Message VPN. The options are:
-                                    1) "messaging" - Act as a message broker on which REST messages are queued.
-                                    2) "gateway" - Act as a message gateway through which REST messages are propagated.
-
-        Returns:
-            _type_: _description_
-        """
-
-        endpoint = self.config_base_path+f"/msgVpns"
-
-        body = {"msgVpnName": msgVpnName,
-                "enabled": enabled,
-                "authenticationBasicEnabled": authenticationBasicEnabled,
-                "authenticationBasicType": authenticationBasicType,
-                "maxMsgSpoolUsage": maxMsgSpoolUsage,
-                "serviceRestIncomingPlainTextEnabled": serviceRestIncomingPlainTextEnabled,
-                "serviceRestIncomingPlainTextListenPort": serviceRestIncomingPlainTextListenPort,
-                "serviceRestMode": serviceRestMode
-                }
-
-        body = body | kwargs
-
-        res = self.http_client.http_post(endpoint= endpoint, payload= body)
-
-        if throw_exception:
-            res.raise_for_status()
-        return res.json()
-
-    def delete_message_vpn(self, msgVpnName:str, throw_exception= True)->dict:
-        endpoint = self.config_base_path+f"/msgVpns/{msgVpnName}"
-
-        res = self.http_client.http_delete(endpoint= endpoint)
-
-        if throw_exception:
-            res.raise_for_status()
-        return res.json()
+    
 
 
     # Topic endpoint

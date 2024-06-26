@@ -16,10 +16,10 @@ NEW_VPN_NAME= "test_vpn_"+get_timestamp()
 NEW_VPN_PORT=  6969
 
 log = logging.getLogger("Manager_Test")
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.ERROR)
 
 
-count= testCount(title="#Manager test", total_tests= 11)
+count= testCount(title="#Manager test", total_tests= 19)
 
 
 #Testing getting an instance of manager class
@@ -54,6 +54,44 @@ except Exception as e:
     log.error("Error str: "+str(e))
 
 
+#Testing "get_current_user_info" function
+try:
+    count.add_count()
+    res = manager.get_current_user_info()
+    log.info("Function 'get_current_user_info': PASS")  
+    log.info(str(res)+'\n')
+    count.passed()
+except Exception as e:
+    count.failed()
+    log.info("Function 'get_current_user_info': FAIL")  
+    log.error("Error str: "+str(e))
+
+
+#Testing "get_message_vpn_access_list" function
+try:
+    count.add_count()
+    res = manager.get_message_vpn_access_list()
+    log.info("Function 'get_message_vpn_access_list': PASS")  
+    log.info(str(res)+'\n')
+    count.passed()
+except Exception as e:
+    count.failed()
+    log.info("Function 'get_message_vpn_access_list': FAIL")  
+    log.error("Error str: "+str(e))
+
+#Testing "get_vpn_access_info" function
+try:
+    count.add_count()
+    res = manager.get_message_vpn_access_info("default")
+    log.info("Function 'get_vpn_access_info': PASS")  
+    log.info(str(res)+'\n')
+    count.passed()
+except Exception as e:
+    count.failed()
+    log.info("Function 'get_vpn_access_info': FAIL")  
+    log.error("Error str: "+str(e))
+
+
 #Testing "fetch_all_vpn_objects" function
 try:
     count.add_count()
@@ -77,6 +115,19 @@ try:
 except Exception as e:
     count.failed()
     log.info("Function 'list_message_vpns': FAIL")  
+    log.error("Error str: "+str(e))
+
+
+#Testing "get_message_vpn_info" function
+try:
+    count.add_count()
+    res = manager.get_message_vpn_info("default")
+    log.info("Function 'get_message_vpn_info': PASS") 
+    log.info(str(res)+'\n') 
+    count.passed()
+except Exception as e:
+    count.failed()
+    log.info("Function 'get_message_vpn_info': FAIL")  
     log.error("Error str: "+str(e))
 
 
@@ -120,11 +171,36 @@ except Exception as e:
 try:
     #Testing "create_message_vpn" function
     count.add_count()
-    res = manager.create_message_vpn(msgVpnName= NEW_VPN_NAME,
-                                    serviceRestIncomingPlainTextListenPort= NEW_VPN_PORT)
+    new_vpn_object = manager.create_message_vpn(msgVpnName= NEW_VPN_NAME,
+                                                serviceRestIncomingPlainTextListenPort= NEW_VPN_PORT)
     log.info("Function 'create_message_vpn': PASS") 
-    log.info(str(res)+'\n')
+    log.info(str(new_vpn_object)+'\n')
     count.passed()
+
+    #Testing "update_message_vpn" function
+    try:
+        count.add_count()
+        res = manager.update_message_vpn(msgVpnName= NEW_VPN_NAME, update_attributes= {"alias": "def"})
+        log.info("Function 'update_message_vpn': PASS") 
+        log.info(str(res)+'\n') 
+        count.passed()
+    except Exception as e:
+        count.failed()
+        log.info("Function 'update_message_vpn': FAIL")  
+        log.error("Error str: "+str(e))
+
+    #Testing "replace_message_vpn" function
+    try:
+        count.add_count()
+        res = manager.replace_message_vpn(msgVpnName= NEW_VPN_NAME, 
+                                          replacement_vpn_object= {"alias": "def"}) #replacing it with itself
+        log.info("Function 'replace_message_vpn': PASS") 
+        log.info(str(res)+'\n') 
+        count.passed()
+    except Exception as e:
+        count.failed()
+        log.info("Function 'replace_message_vpn': FAIL")  
+        log.error("Error str: "+str(e))
 
     #Testing "auto_rest_messaging_setup_utility" function. 
     #Uses: create_queue_endpoint, subscribe_to_topic_on_queue, create_rest_delivery_point, specify_rest_consumer, & create_queue_binding
