@@ -14,6 +14,11 @@ def return_uppercase(event:dict, kill_function):
     """
     byte_string_content= event["content"][1:-1]
     regular_string_content= byte_string_content.decode("utf-8")
+
+    #print(event["content"].decode("utf-8"))
+    if event["content"].decode("utf-8") == "kill_server":
+        kill_function("server killed")
+
     uppercase_response= str.upper( regular_string_content ) 
     return uppercase_response
 
@@ -23,7 +28,7 @@ if __name__ == "__main__":
 
     ret = consumer_obj.startConsumer(host= "127.0.0.1", port=5000, 
                                 callback_function= return_uppercase, log=True,
-                                auto_stop= True)
+                                auto_stop= False)
     
     print(ret)
 
