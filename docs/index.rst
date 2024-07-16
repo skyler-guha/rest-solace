@@ -9,4 +9,4 @@ List of topics:
     | Consumer (pending)
     | Manager (pending)
     | `SEMPv2 endpoint support <https://github.com/skyler-guha/rest-solace/blob/master/docs/semp_v2_endpoint_support.rst>`_
-    | `Known Buds <https://github.com/skyler-guha/rest-solace/blob/master/docs/known_bugs.rst>`_
+    | `Known Bugs <https://github.com/skyler-guha/rest-solace/blob/master/docs/known_bugs.rst>`_

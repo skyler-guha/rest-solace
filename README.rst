@@ -218,7 +218,7 @@ Sending messages (for message-VPN in messaging mode):
         }
     ]
 
-    response= publish.send_messages(data= message_data, )
+    response= publish.send_messages(data= message_data, async_mode= True)
     print(response)
 
 |
@@ -356,8 +356,7 @@ Future plans:
 ------------------------------------------------------------------
 
 * Add ability to specify host details separately for each message sending call.
-* Adding a fast API + unicorn based consumer server option. 
-(Since fastAPI has more stability and better performance even if it has less features)
+* Adding a fast API + unicorn based consumer server option (Since fastAPI has more stability and better performance even if it has less features).
 * Adding support for more management APIs and adding the relevant docs.
 
 ..
