@@ -1,0 +1,197 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "array",
+    "items": {
+        "oneOf": [
+            {
+                "type": "object",
+                "properties": {
+                    "direct_message_to_queue": {
+                        "type": "object",
+                        "properties": {
+                            "queue_name": {
+                                "type": "string"
+                            },
+                            "message": {
+                                "type": "string"
+                            },
+                            "reply_to_queue": {
+                                "type": ["string", "null"]
+                            },
+                            "reply_for_topic": {
+                                "type": ["string", "null"]
+                            },
+                            "timeout": {
+                                "type": ["integer", "null"]
+                            },
+                            "throw_exception": {
+                                "type": "boolean"
+                            }
+                        },
+                        "not":{
+                            "allOf": [
+                                {
+                                "required": [
+                                    "queue_name",
+                                    "message"
+                                    ]
+                                },
+                                {
+                                "required": [
+                                    "queue_name",
+                                    "message",
+                                    "reply_to_queue"
+                                            ]
+                                },
+                                {
+                                "required": [
+                                    "queue_name",
+                                    "message",
+                                    "reply_for_topic"
+                                            ]
+                                }
+                            ]
+                        }
+                    }
+                },
+                "required": [
+                "direct_message_to_queue"
+                ]
+            },
+            {
+                "type": "object",
+                "properties": {
+                    "direct_message_for_topic": {
+                        "type": "object",
+                        "properties": {
+                            "topic_string": {
+                                "type": "string"
+                            },
+                            "message": {
+                                "type": "string"
+                            },
+                            "reply_to_queue":{
+                                "type": ["string", "null"]
+                            },
+                            "reply_for_topic":{
+                                "type": ["string", "null"]
+                            },
+                            "timeout": {
+                                "type": ["integer", "null"]
+                            },
+                            "throw_exception": {
+                                "type": "boolean"
+                            }
+                        },
+                        "not":{
+                            "allOf": [
+                                {
+                                "required": [
+                                    "topic_string",
+                                    "message"
+                                    ]
+                                },
+                                {
+                                "required": [
+                                    "topic_string",
+                                    "message",
+                                    "reply_to_queue"
+                                            ]
+                                },
+                                {
+                                "required": [
+                                    "topic_string",
+                                    "message",
+                                    "reply_for_topic"
+                                            ]
+                                }
+                            ]
+                        }
+                    }
+                },
+                "required": [
+                "direct_message_for_topic"
+                ]
+            },
+            {
+                "type": "object",
+                "properties": {
+                    "persistent_message_to_queue": {
+                        "type": "object",
+                        "properties": {
+                            "queue_name": {
+                                "type": "string"
+                            },
+                            "message": {
+                                "type": "string"
+                            },
+                            "request_reply": {
+                                "type": "boolean"
+                            },
+                            "time_to_live": {
+                                "type": ["integer", "null"]
+                            },
+                            "DMQ_eligible": {
+                                "type": "boolean"
+                            },
+                            "timeout": {
+                                "type": ["integer", "null"]
+                            },
+                            "throw_exception": {
+                                "type": "boolean"
+                            }
+                        },
+                        "required": [
+                        "queue_name",
+                        "message"
+                        ]
+                    }
+                },
+                "required": [
+                "persistent_message_to_queue"
+                ]
+            },
+            {
+                "type": "object",
+                "properties": {
+                    "persistent_message_for_topic": {
+                        "type": "object",
+                        "properties": {
+                            "topic_string": {
+                                "type": "string"
+                            },
+                            "message": {
+                                "type": "string"
+                            },
+                            "request_reply": {
+                                "type": "boolean"
+                            },
+                            "time_to_live": {
+                                "type": ["integer", "null"]
+                            },
+                            "DMQ_eligible": {
+                                "type": "boolean"
+                            },
+                            "timeout": {
+                                "type": ["integer", "null"]
+                            },
+                            "throw_exception": {
+                                "type": "boolean"
+                            }
+                        },
+                        "required": [
+                        "topic_string",
+                        "message"
+                        ]
+                    }
+                },
+                "required": [
+                "persistent_message_for_topic"
+                ]
+            }
+        ]
+    }
+  }
+  
+  
+

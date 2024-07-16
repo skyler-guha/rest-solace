@@ -10,4 +10,6 @@ dist/
 rest_solace.egg-info/
 
 #cache folders
-__pycache__
+__pycache__git/
+src/rest_solace/__pycache__/
+tests/__pycache__/

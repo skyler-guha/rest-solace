@@ -1,6 +1,7 @@
 import json
 import asyncio
-import warnings
+from jsonschema import validate
+import pathlib
 from .http_client import HttpClient
 from requests.exceptions import ReadTimeout
 from aiohttp.client_exceptions import ServerTimeoutError
@@ -26,6 +27,11 @@ class MessagingPublisher():
                                       user_name= user_name,
                                       password= password,
                                       verify_ssl= verify_ssl)
+        
+        #getting massaging schema
+        with open(file=f"{pathlib.Path(__file__).parent.resolve()}/messaging_schema.json", 
+                  encoding='utf-8') as messaging_schema_file:
+                self.messaging_schema = json.load(messaging_schema_file)
         
     def update_parameters(self, user_name:str, password:str,
                           host:str, rest_vpn_port:str, verify_ssl=False)->None:
@@ -219,12 +225,11 @@ class MessagingPublisher():
         endpoint = f"/QUEUE/{queue_name}"
 
         headers = {'Content-Type': 'text/plain',
-                   'Solace-Delivery-Mode': 'persistent',
-                   'Solace-Reply-Wait-Time-In-ms': "FOREVER" 
+                   'Solace-Delivery-Mode': 'persistent'
                    }
         
         if request_reply == True:
-            headers['Solace-Reply-Wait-Time-In-ms'] = "FOREVER" #specifies to broker that reply is expected
+            headers['Solace-Reply-Wait-Time-In-ms'] = "FOREVER" #Specifies to broker that reply from the consumer is expected.
 
         if time_to_live != None:
             headers['Solace-Time-To-Live-In-ms'] = str(time_to_live) #Time after which the message is removed from queue.
@@ -494,12 +499,11 @@ class MessagingPublisher():
             dict: Dictionary containing request information and {'timeout':False}.
                   Incase timeout is reached, returned dictionary only contains {'timeout':True}.
         """
-
+        #raise Exception("test exception")
         endpoint = f"/QUEUE/{queue_name}"
 
         headers = {'Content-Type': 'text/plain',
-                   'Solace-Delivery-Mode': 'persistent',
-                   'Solace-Reply-Wait-Time-In-ms': "FOREVER" 
+                   'Solace-Delivery-Mode': 'persistent'
                    }
         
         if request_reply == True:
@@ -618,12 +622,14 @@ class MessagingPublisher():
             list: Output values.
         """
         
-        warnings.warn('This function is experimental. It does no validation nor is designed to properly handel errors. Its features can be changed in the future.')
-        
+        #get data dict if file path is provided.
         if isinstance(data, str):
-
             with open(file=data, encoding='utf-8') as json_file:
                 data = json.load(json_file)
+
+        #validate json data
+        validate(instance= data, 
+                 schema= self.messaging_schema)
 
         if async_mode == True:
 
@@ -646,7 +652,7 @@ class MessagingPublisher():
 
                     coroutines.append( func_obj( **func_params ))
 
-                awaited_results = await asyncio.gather(*coroutines)
+                awaited_results = await asyncio.gather(*coroutines, return_exceptions=True)
                 return awaited_results
 
             
@@ -661,6 +667,8 @@ class MessagingPublisher():
                              "persistent_message_to_queue": self.persistent_message_to_queue,
                              "persistent_message_for_topic": self.persistent_message_for_topic}
             
+            results = list()
+            
             for message_object in data:
 
                 func_name = list(message_object)[0]
@@ -669,7 +677,12 @@ class MessagingPublisher():
 
                 func_obj = sync_functions[func_name]
 
-                func_obj( **func_params )
+                try:
+                    results.append(func_obj( **func_params ))
+                except Exception as e:
+                    results.append(e)
+
+            return results
             
         else:
 
