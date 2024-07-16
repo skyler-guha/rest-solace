@@ -21,6 +21,8 @@ Note:
 | View the code at `Github <https://github.com/skyler-guha/rest-solace/>`_.
 | Read the docs from `Here <https://github.com/skyler-guha/rest-solace/blob/master/docs/index.rst/>`_.
 
+If you like my work, please give a star to the official repository to show support!! 
+
 -----------------------------
 Getting started with Solace:
 -----------------------------
@@ -164,28 +166,22 @@ Sending messages (for message-VPN in messaging mode):
 .. code-block:: python
 
     message_data= [
-            {
+        {
             "direct_message_to_queue": {
                 "queue_name": "queue_rest_consumer",
-                "message": "direct_message_to_queue",
-                "timeout": 30,
-                "throw_exception": false
+                "message": "direct_message_to_queue"
             }
         },
         {
             "direct_message_for_topic": {
                 "topic_string": "my_topic",
-                "message": "direct_message_for_topic",
-                "timeout": 30,
-                "throw_exception": false
+                "message": "direct_message_for_topic"
             }
         },
         {
             "persistent_message_to_queue": {
                 "queue_name": "queue_rest_consumer",
                 "message": "persistent_message_to_queue",
-                "timeout": 30,
-                "throw_exception": false,
                 "request_reply": false
             }
         },
@@ -193,8 +189,6 @@ Sending messages (for message-VPN in messaging mode):
             "persistent_message_to_queue": {
                 "queue_name": "queue_rest_consumer",
                 "message": "persistent_message_to_queue",
-                "timeout": 30,
-                "throw_exception": false,
                 "request_reply": true
             }
         },
@@ -202,8 +196,6 @@ Sending messages (for message-VPN in messaging mode):
             "persistent_message_for_topic": {
                 "topic_string": "my_topic",
                 "message": "persistent_message_for_topic",
-                "timeout": 30,
-                "throw_exception": false,
                 "request_reply": false
             }
         },
@@ -211,8 +203,6 @@ Sending messages (for message-VPN in messaging mode):
             "persistent_message_for_topic": {
                 "topic_string": "my_topic",
                 "message": "persistent_message_for_topic",
-                "timeout": 30,
-                "throw_exception": false,
                 "request_reply": true
             }
         }

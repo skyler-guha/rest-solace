@@ -444,28 +444,22 @@ Example:
 .. code-block:: python
 
     message_data= [
-            {
+        {
             "direct_message_to_queue": {
                 "queue_name": "queue_rest_consumer",
-                "message": "direct_message_to_queue",
-                "timeout": 30,
-                "throw_exception": false
+                "message": "direct_message_to_queue"
             }
         },
         {
             "direct_message_for_topic": {
                 "topic_string": "my_topic",
-                "message": "direct_message_for_topic",
-                "timeout": 30,
-                "throw_exception": false
+                "message": "direct_message_for_topic"
             }
         },
         {
             "persistent_message_to_queue": {
                 "queue_name": "queue_rest_consumer",
                 "message": "persistent_message_to_queue",
-                "timeout": 30,
-                "throw_exception": false,
                 "request_reply": false
             }
         },
@@ -473,8 +467,6 @@ Example:
             "persistent_message_to_queue": {
                 "queue_name": "queue_rest_consumer",
                 "message": "persistent_message_to_queue",
-                "timeout": 30,
-                "throw_exception": false,
                 "request_reply": true
             }
         },
@@ -482,8 +474,6 @@ Example:
             "persistent_message_for_topic": {
                 "topic_string": "my_topic",
                 "message": "persistent_message_for_topic",
-                "timeout": 30,
-                "throw_exception": false,
                 "request_reply": false
             }
         },
@@ -491,8 +481,6 @@ Example:
             "persistent_message_for_topic": {
                 "topic_string": "my_topic",
                 "message": "persistent_message_for_topic",
-                "timeout": 30,
-                "throw_exception": false,
                 "request_reply": true
             }
         }
