@@ -8,3 +8,6 @@ Pipfile.lock
 #distribution package folder
 dist/
 rest_solace.egg-info/
+
+#cache folders
+__pycache__
