@@ -7,6 +7,9 @@ It is licensed under "Apache 2.0 license".
 This software uses "aiohttp" library by aio-libs contributors, primarily  Nikolay Kim and Andrew Svetlov.
 It is licensed under "Apache 2.0 license".
 
+This software uses "jsonschema" library by Julian Berman.
+It is licensed under "MIT license".
+
 This software uses "http" library by The Python Software Foundation.
 It is licensed under "The Python Software Foundation License (PSFL)"
 

@@ -14,7 +14,7 @@ making them directly compatible with json data types.
 Note: 
     | Right now the focus of this library is on the 'messaging' mode for solace message VPNs.
     | In the future I plan to add better support for 'gateway' mode as well.
-    | This library currently uses SEMPv2 for management. 
+    | This library currently uses SEMPv2 for management and only supports basic/common management functions. You are encouraged to contribute to thr repo if you don't find something you wanted. 
 
 |
 | Check it out at `PyPI <https://pypi.org/project/rest-solace/>`_. 
@@ -158,6 +158,69 @@ Sending messages (for message-VPN in messaging mode):
     print(response)
 
 
+*Publish multiple messages in a batch (Asynchronous or Synchronously):*
+-----------------------------------------------------------------------------------------------------------
+
+.. code-block:: python
+
+    message_data= [
+            {
+            "direct_message_to_queue": {
+                "queue_name": "queue_rest_consumer",
+                "message": "direct_message_to_queue",
+                "timeout": 30,
+                "throw_exception": false
+            }
+        },
+        {
+            "direct_message_for_topic": {
+                "topic_string": "my_topic",
+                "message": "direct_message_for_topic",
+                "timeout": 30,
+                "throw_exception": false
+            }
+        },
+        {
+            "persistent_message_to_queue": {
+                "queue_name": "queue_rest_consumer",
+                "message": "persistent_message_to_queue",
+                "timeout": 30,
+                "throw_exception": false,
+                "request_reply": false
+            }
+        },
+        {
+            "persistent_message_to_queue": {
+                "queue_name": "queue_rest_consumer",
+                "message": "persistent_message_to_queue",
+                "timeout": 30,
+                "throw_exception": false,
+                "request_reply": true
+            }
+        },
+        {
+            "persistent_message_for_topic": {
+                "topic_string": "my_topic",
+                "message": "persistent_message_for_topic",
+                "timeout": 30,
+                "throw_exception": false,
+                "request_reply": false
+            }
+        },
+        {
+            "persistent_message_for_topic": {
+                "topic_string": "my_topic",
+                "message": "persistent_message_for_topic",
+                "timeout": 30,
+                "throw_exception": false,
+                "request_reply": true
+            }
+        }
+    ]
+
+    response= publish.send_messages(data= message_data, )
+    print(response)
+
 |
 
 -----------------------------------------------
@@ -284,6 +347,18 @@ Setting up a message VPN for message broking (in messaging mode):
 
     #Turning your RDP off and on again (Useful if solace has trouble connecting to your consumer)
     manager.restart_rest_delivery_point(msgVpnName= NEW_VPN_NAME, restDeliveryPointName= 'myRDP')
+
+
+|
+
+------------------------------------------------------------------
+Future plans:
+------------------------------------------------------------------
+
+* Add ability to specify host details separately for each message sending call.
+* Adding a fast API + unicorn based consumer server option. 
+(Since fastAPI has more stability and better performance even if it has less features)
+* Adding support for more management APIs and adding the relevant docs.
 
 ..
    _url to get download data: https://pypistats.org/packages/rest-solace

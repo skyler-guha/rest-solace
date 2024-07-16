@@ -426,7 +426,7 @@ Example:
     print(response)
 
 
-*Function: send_messages (EXPERIMENTAL)*
+*Function: send_messages*
 -------------------------------------------
 Send multiple messages in a batch.
 
@@ -434,6 +434,7 @@ Args:
  - data (list | str): Either a list of dictionaries containing message data, 
             or a string containing path to a json file with the data.
             async_mode (bool, optional): To send the message asynchronously or not. Defaults to True.
+- async_mode (bool, optional): To send the message asynchronously or not. Defaults to True.
 
 Returns:
  - list: Output values.
@@ -443,23 +444,59 @@ Example:
 .. code-block:: python
 
     message_data= [
-        {
+            {
             "direct_message_to_queue": {
                 "queue_name": "queue_rest_consumer",
-                "message": "hello world!!",
-                "timeout": 120,
+                "message": "direct_message_to_queue",
+                "timeout": 30,
                 "throw_exception": false
             }
         },
         {
             "direct_message_for_topic": {
                 "topic_string": "my_topic",
-                "message": "hello world!!",
-                "timeout": 120,
+                "message": "direct_message_for_topic",
+                "timeout": 30,
                 "throw_exception": false
+            }
+        },
+        {
+            "persistent_message_to_queue": {
+                "queue_name": "queue_rest_consumer",
+                "message": "persistent_message_to_queue",
+                "timeout": 30,
+                "throw_exception": false,
+                "request_reply": false
+            }
+        },
+        {
+            "persistent_message_to_queue": {
+                "queue_name": "queue_rest_consumer",
+                "message": "persistent_message_to_queue",
+                "timeout": 30,
+                "throw_exception": false,
+                "request_reply": true
+            }
+        },
+        {
+            "persistent_message_for_topic": {
+                "topic_string": "my_topic",
+                "message": "persistent_message_for_topic",
+                "timeout": 30,
+                "throw_exception": false,
+                "request_reply": false
+            }
+        },
+        {
+            "persistent_message_for_topic": {
+                "topic_string": "my_topic",
+                "message": "persistent_message_for_topic",
+                "timeout": 30,
+                "throw_exception": false,
+                "request_reply": true
             }
         }
     ]
 
-    res= publish.send_messages(data= message_data)
-    print(res)
+    response= publish.send_messages(data= message_data, async_mode= True)
+    print(response)
