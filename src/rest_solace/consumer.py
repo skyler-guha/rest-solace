@@ -1,4 +1,4 @@
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from functools import partial
 from datetime import datetime
 from typing import Callable
@@ -106,7 +106,8 @@ class Consumer:
         server_address = (host, port)
 
         handler_class = partial(SolaceConsumerServer, killer_queue, result_queue, callback_function, log, auto_stop)
-        httpd = HTTPServer(server_address, handler_class)
+        #httpd = HTTPServer(server_address, handler_class)
+        httpd = ThreadingHTTPServer(server_address, handler_class)
 
 
         if log: print("Running Consumer Server...\n")
@@ -114,10 +115,10 @@ class Consumer:
         #Creating server thread
         server_thread = Thread(target = httpd.serve_forever) 
         server_thread.start()
-         
+        
         #Add these in a thread with sleep func in the future so that the while loops do not hog cpu.
         try:
-            if timeout==None:
+            if (timeout == None):
                 while True:
                     if killer_queue.get() == 1:
                         if log: print("\nStopping server to return output...")
